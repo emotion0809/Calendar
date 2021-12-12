@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_calendar">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.calendar.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_calendar"
+        android:name="com.example.calendar.ui.calendar.CalendarFragment"
+        android:label="@string/menu_calendar"
+        tools:layout="@layout/fragment_calendar" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.calendar.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_work"
+        android:name="com.example.calendar.ui.work.WorkFragment"
+        android:label="@string/menu_work"
+        tools:layout="@layout/fragment_work" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.calendar.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_diary"
+        android:name="com.example.calendar.ui.diary.DiaryFragment"
+        android:label="@string/menu_diary"
+        tools:layout="@layout/fragment_diary" />
 </navigation>
