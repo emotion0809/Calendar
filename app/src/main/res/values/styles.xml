@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="calendarWeek">
+        <item name="android:textSize">16dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/blue_1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_rowWeight">2</item>
+        <item name="android:layout_columnWeight">1</item>
+    </style>
+
+    <style name="calendarDate">
+        <item name="android:textSize">14dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center_horizontal|top</item>
+    </style>
+
+    <style name="optionTitle">
+        <item name="android:textSize">16dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:textColor">@color/optionTitle</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+
+    <style name="option">
+        <item name="android:textSize">14dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>>
+        <item name="android:textColor">@color/option</item>
+    </style>
+
+    <style name="smallTitle">
+        <item name="android:textSize">14dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>
