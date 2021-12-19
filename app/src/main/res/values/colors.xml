@@ -10,6 +10,7 @@
 
     <color name="blue_1">#4A4AFF</color>
     <color name="hint">#757575</color>
-    <color name="optionTitle">#00CACA</color>
+    <color name="optionTitle">#003D79</color>
     <color name="option">#4F4F4F</color>
+    <color name="backgroud">#ECECFF</color>>
 </resources>

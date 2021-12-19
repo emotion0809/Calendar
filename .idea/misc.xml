@@ -7,9 +7,11 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/ic_add.xml" value="0.12962962962962962" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/ic_work.xml" value="0.11944444444444445" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/activity_new_remind.xml" value="0.22" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/activity_new_remind.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/content_main.xml" value="0.2682291666666667" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/diallog_select_time.xml" value="0.2574074074074074" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_new_remind.xml" value="0.33" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_time.xml" value="0.24444444444444444" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/fragment_calendar.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/layout_time.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/nav_header_main.xml" value="0.1390625" />
