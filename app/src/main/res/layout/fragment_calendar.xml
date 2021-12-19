@@ -7,188 +7,28 @@
     android:layout_rowWeight="1"
     tools:context=".ui.calendar.CalendarFragment">
 
-    <androidx.gridlayout.widget.GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id ="@+id/grid_calendar"
-        app:columnCount="7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rowCount="7">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_sunday"
-            style="@style/calendarWeek"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sunday"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_monday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/monday"
-            app:layout_column="1"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_tuesday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tuesday"
-            app:layout_column="2"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_thursday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/thursday"
-            app:layout_column="3"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_wednesday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wednesday"
-            app:layout_column="4"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_friday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/friday"
-            app:layout_column="5"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-
-        <TextView
-            android:id="@+id/text_saturday"
-            style="@style/calendarWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/saturday"
-            app:layout_column="6"
-            app:layout_columnWeight="1"
-            app:layout_row="0" />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_1"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="2"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_8"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="3"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_15"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="4"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_22"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="5"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_29"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_column="0"
-            app:layout_columnWeight="1"
-            app:layout_row="6"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/text_dateGrid_36"
-                style="@style/calendarDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-        </LinearLayout>
+            android:text="TextView"
+            />
 
 
-    </androidx.gridlayout.widget.GridLayout>
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/calendar_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:columnCount="7"
+            app:rowCount="7">
+
+
+        </androidx.gridlayout.widget.GridLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
