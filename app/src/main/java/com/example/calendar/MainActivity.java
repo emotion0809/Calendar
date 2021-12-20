@@ -1,14 +1,22 @@
 package com.example.calendar;
 
+
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.view.accessibility.AccessibilityManager;
+import android.widget.Toast;
 
 import com.example.calendar.databinding.ActivityMainBinding;
+import com.example.calendar.ui.calendar.CalendarFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.appcompat.app.ActionBar;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -65,5 +73,58 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onClick_monthSel(View view) {
+        switch (view.getId()) {
+            case R.id.button_lAro:
+                if (CalendarFragment.startmonth - 2 < 0) {
+
+                }
+                if (CalendarFragment.startmonth != 1) {
+                    CalendarFragment.startmonth--;
+                } else {
+                    CalendarFragment.year--;
+                    isLeapYear();
+                    CalendarFragment.startmonth = 12;
+                }
+                //
+
+                CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
+                if (CalendarFragment.startdate < 1) {
+
+                    CalendarFragment.startdate += 7;
+                }
+
+                break;
+            case R.id.button_rAro:
+                CalendarFragment.startdate += CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
+                if (CalendarFragment.startdate > 7) {
+                    CalendarFragment.startdate -= 7;
+                }
+                if (CalendarFragment.startmonth != 12) {
+                    CalendarFragment.startmonth++;
+                    isLeapYear();
+                } else {
+                    CalendarFragment.year++;
+                    CalendarFragment.startmonth = 1;
+                }
+                break;
+        }
+        try {
+            CalendarFragment.init(CalendarFragment.froot);
+        } catch (Exception eee) {
+            System.out.println(eee);
+        }
+    }
+
+    void isLeapYear() {
+        if (CalendarFragment.year % 4 == 0 && CalendarFragment.year % 100 != 0) {
+            CalendarFragment.month_days[1] = 29;
+        } else {
+            CalendarFragment.month_days[1] = 28;
+        }
+
     }
 }
