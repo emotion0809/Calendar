@@ -109,6 +109,7 @@ public class CalendarFragment extends Fragment {
                     LinearLayout layout_date = new LinearLayout(root.getContext());
                     oImageView = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
                     if (printdate == ymd[2] && year == ymd[0] && startmonth == ymd[1]) {
+                        ///////當天日期HIGHLIGHT
                         layout_date.setBackgroundColor(Color.parseColor("#97CBFF"));
 
                     }

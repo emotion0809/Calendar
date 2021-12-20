@@ -53,5 +53,10 @@ public class NewRemindActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "selectTime");
     }
 
+    public void onClick_selectColor(View view){
+        DialogFragment newFragment = new SelectColorDialog();
+        newFragment.show(getSupportFragmentManager(), "selectColor");
+    }
+
 
 }

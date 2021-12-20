@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick_selectColor"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_colorBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_circle"
+                app:tint="#FF0000FF" />
+
+            <EditText
+                android:id="@+id/editText_colorBlue"
+                style="@style/optionTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="藍色" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick_selectColor"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_colorRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_circle"
+                app:tint="#FFFF0000" />
+
+            <EditText
+                android:id="@+id/editText_colorRed"
+                style="@style/optionTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="紅色" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick_selectColor"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_colorGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_circle"
+                app:tint="#FF00FF00" />
+
+            <EditText
+                android:id="@+id/editText_colorGreen"
+                style="@style/optionTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="綠色" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick_selectColor"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_colorYellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_circle"
+                app:tint="#FFFFFF00" />
+
+            <EditText
+                android:id="@+id/editText_colorYellow"
+                style="@style/optionTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="黃色" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/Time"
+                android:contentDescription="@string/time"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:onClick="onClick_monthSel"
