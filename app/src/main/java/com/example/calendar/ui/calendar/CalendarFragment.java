@@ -113,6 +113,7 @@ public class CalendarFragment extends Fragment {
                         layout_date.setBackgroundColor(Color.parseColor("#97CBFF"));
 
                     }
+
                     if (r == 1 && c >= startdate - 1) {
                         oImageView.setText(String.format("%s", printdate));
                         printdate++;
