@@ -15,10 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.calendar.MainActivity;
 import com.example.calendar.R;
 import com.example.calendar.databinding.FragmentCalendarBinding;
 
@@ -37,6 +39,7 @@ public class CalendarFragment extends Fragment {
     public static int year = 2021;
     public static int[] month_days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public static View froot;
+    public static int[] ymd = {0, 0, 0};
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -60,15 +63,7 @@ public class CalendarFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void init(View root) {
-        int[] ymd = {0, 0, 0};
-        TextView mt = root.findViewById(R.id.month_title);
-        GridLayout gridLayout = (GridLayout) root.findViewById(R.id.calendar_grid);
-        gridLayout.removeAllViews();
-
-        String[] weekdate = {"日", "一", "二", "三", "四", "五", "六"};
-        String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
-
+    public static void setDate(){
         LocalDateTime curTime = LocalDateTime.now();
         DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy", Locale.TAIWAN);
         ymd[0] = Integer.parseInt(formmat1.format(curTime));
@@ -76,78 +71,61 @@ public class CalendarFragment extends Fragment {
         ymd[1] = Integer.parseInt(formmat1.format(curTime));
         formmat1 = DateTimeFormatter.ofPattern("dd", Locale.TAIWAN);
         ymd[2] = Integer.parseInt(formmat1.format(curTime));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void init(View root) {
+        setDate();
+        String[] weekdate = {"日", "一", "二", "三", "四", "五", "六"};
+        //年份和月份
+        TextView text_month = root.findViewById(R.id.text_month);
+        text_month.setTextSize(20);
+        text_month.setText(String.format("%d年 %d月", year, startmonth));
+        final int column = 7;
+        final int row = 7;
+        GridLayout gridLayout = (GridLayout) root.findViewById(R.id.calendar_grid);
+        gridLayout.removeAllViews();
+        gridLayout.setColumnCount(column);
+        gridLayout.setRowCount(row);
+        //星期
+        for (int c = 0, r = 0; c < column; c++) {
+            TextView text_week = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendar));
+            text_week.setText(weekdate[c]);
+            GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.columnSpec = GridLayout.spec(c, 1f);
+            param.rowSpec = GridLayout.spec(r);
+            text_week.setLayoutParams(param);
+            gridLayout.addView(text_week);
+        }
+        //日期
         int printdate = 1;
-        mt.setTextSize(30.0f);
-        mt.setText(String.format("%s", year) + "," + monthName[startmonth - 1] + "月");
-
-        try {
-            int total = 49;
-            int column = 7;
-            int row = total / column;
-            gridLayout.setColumnCount(column);
-            gridLayout.setRowCount(row + 1);
-
-            for (int i = 0, c = 0, r = 0; i < total; i++, c++) {
-                if (c == column) {
-                    c = 0;
-                    r++;
+        for (int r = 1; r < row; r++) {
+            for (int c = 0; c < column; c++) {
+                LinearLayout layout_date = new LinearLayout(root.getContext());
+                layout_date.setOrientation(LinearLayout.VERTICAL);
+                TextView text_date = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
+                if (r == 1 && c >= startdate - 1 || r > 1 && printdate <= month_days[startmonth - 1]) {
+                    text_date.setText(String.format("%d", printdate));
+                    printdate++;
+                } else {
+                    text_date.setText("");
+                }
+                layout_date.addView(text_date);
+                if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate -1) {
+                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.broder_today));
+                }else{
+                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.broder));
                 }
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-                TextView oImageView;
-
-                if (r == 0) {
-                    oImageView = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendar));
-                    oImageView.setText(weekdate[c]);
-                    param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-                    param.width = GridLayout.LayoutParams.WRAP_CONTENT;
-                    //param.setGravity(Gravity.CENTER_HORIZONTAL);
-                    param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-                    param.rowSpec = GridLayout.spec(r);
-                    oImageView.setLayoutParams(param);
-                    gridLayout.addView(oImageView);
-                } else {
-                    LinearLayout layout_date = new LinearLayout(root.getContext());
-                    oImageView = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
-                    if (printdate == ymd[2] && year == ymd[0] && startmonth == ymd[1]) {
-                        ///////當天日期HIGHLIGHT
-                        layout_date.setBackgroundColor(Color.parseColor("#97CBFF"));
-
-                    }
-
-                    if (r == 1 && c >= startdate - 1) {
-                        oImageView.setText(String.format("%s", printdate));
-                        printdate++;
-                    } else if (r > 1 && printdate <= month_days[startmonth - 1]) {
-                        oImageView.setText(String.format("%s", printdate));
-                        printdate++;
-                    } else {
-                        oImageView.setText("");
-                    }
-
-                    param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-                    param.width = GridLayout.LayoutParams.MATCH_PARENT;
-                    //oImageView.setLayoutParams(param);
-
-                    layout_date.addView(oImageView);
-
-                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-                    layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-                    layoutParams.width = GridLayout.LayoutParams.WRAP_CONTENT;
-                    //layout_date.setBackgroundColor(500034);
-                    //param.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                    layoutParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-                    layoutParams.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-                    layout_date.setOrientation(LinearLayout.VERTICAL);
-                    layout_date.setLayoutParams(layoutParams);
-                    gridLayout.addView(layout_date);
-                }
+                param.height = GridLayout.LayoutParams.WRAP_CONTENT;
+                param.width = GridLayout.LayoutParams.WRAP_CONTENT;
+                param.columnSpec = GridLayout.spec(c, 1f);
+                param.rowSpec = GridLayout.spec(r, 1f);
+                layout_date.setLayoutParams(param);
+                gridLayout.addView(layout_date);
             }
-        } catch (Exception ex) {
-            System.out.println(ex);
-            //Toast.makeText(this,ex.toString(),Toast.LENGTH_LONG).show();
         }
-
-
     }
 }
