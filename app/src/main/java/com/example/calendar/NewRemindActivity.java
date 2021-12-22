@@ -8,11 +8,14 @@ import androidx.fragment.app.DialogFragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewRemindActivity extends AppCompatActivity {
@@ -31,7 +34,7 @@ public class NewRemindActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_remind);
         //新增返回建
-        ActionBar actionBar=getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         //switch建觸發(AllDay)
         Switch switch_allDay = (Switch) findViewById(R.id.switch_allDay);
@@ -44,16 +47,63 @@ public class NewRemindActivity extends AppCompatActivity {
                 }
             }
         });
+        try {
+            Spinner sp = this.findViewById(R.id.spinner_type);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+            sp.setAdapter(adapter);
+            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    // your code here
+                    TextView tv = findViewById(R.id.text_startTime);
+                    TextView ta = findViewById(R.id.text_endTime);
+                    Button btn = findViewById(R.id.button_endTime);
+                    switch (sp.getSelectedItem().toString()) {
+                        case "工作":
+                            //????
+                            tv.setText("截止時間");
+                            ta.setText("");
+                            btn.setClickable(false);
+                            btn.setText("");
+                            break;
+                        case "活動":
+                            //????
+                            tv.setText("開始時間");
+                            ta.setText("結束時間");
+                            btn.setClickable(true);
+                            btn.setText("WWW");
+                            break;
+                        case "提醒":
+                            //????
+                            tv.setText("提醒時間");
+                            ta.setText("");
+                            btn.setClickable(false);
+                            btn.setText("");
+                            break;
+                    }
+                    //Toast.makeText(getApplicationContext(), String.format("%s", selectedItemView), Toast.LENGTH_SHORT).show();
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                    Toast.makeText(getApplicationContext(), "Fuck plz", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), String.format("%s", ex), Toast.LENGTH_LONG).show();
+        }
 
     }
 
-    public void onClick_selectTime(View view){
+    public void onClick_selectTime(View view) {
         DialogFragment newFragment = new SelectTimeDialog();
         newFragment.show(getSupportFragmentManager(), "selectTime");
     }
 
-    public void onClick_selectColor(View view){
+    public void onClick_selectColor(View view) {
         DialogFragment newFragment = new SelectColorDialog();
         newFragment.show(getSupportFragmentManager(), "selectColor");
     }

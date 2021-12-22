@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_cus"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_cus"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,18 +11,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/blue_1">
+        android:background="@color/blue_1"
+        android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/dialog_la"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:minWidth="32dp"
             android:minHeight="32dp"
-            app:srcCompat="@drawable/ic_back_arrow"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:onClick="onClick_dialogAro"
+            app:srcCompat="@drawable/ic_back_arrow" />
 
         <TextView
             android:id="@+id/text_smallTitle"
@@ -33,21 +33,21 @@
             android:text="12月" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/dialog_ra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:minWidth="32dp"
             android:minHeight="32dp"
-            app:srcCompat="@drawable/ic_forward_arrow"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:onClick="onClick_dialogAro"
+            app:srcCompat="@drawable/ic_forward_arrow" />
 
     </LinearLayout>
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/grid_smallCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/grid_smallCalendar"
         app:columnCount="7"
         app:rowCount="7">
 

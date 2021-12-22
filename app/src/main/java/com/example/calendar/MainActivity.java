@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -86,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
     public void onClick_monthSel(View view) {
         switch (view.getId()) {
             case R.id.button_lAro:
-                if (CalendarFragment.startmonth - 2 < 0) {
-
-                }
                 if (CalendarFragment.startmonth != 1) {
                     CalendarFragment.startmonth--;
                 } else {
@@ -96,14 +92,11 @@ public class MainActivity extends AppCompatActivity {
                     isLeapYear();
                     CalendarFragment.startmonth = 12;
                 }
-                //
-
                 CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
                 if (CalendarFragment.startdate < 1) {
 
                     CalendarFragment.startdate += 7;
                 }
-
                 break;
             case R.id.button_rAro:
                 CalendarFragment.startdate += CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
@@ -123,6 +116,46 @@ public class MainActivity extends AppCompatActivity {
             CalendarFragment.init(CalendarFragment.froot);
         } catch (Exception eee) {
             System.out.println(eee);
+        }
+    }
+
+    public void onClick_dialogAro(View view) {
+        try {
+            switch (view.getId()) {
+                case R.id.dialog_la:
+                    if (CalendarFragment.startmonth != 1) {
+                        CalendarFragment.startmonth--;
+                    } else {
+                        CalendarFragment.year--;
+                        isLeapYear();
+                        CalendarFragment.startmonth = 12;
+                    }
+                    //
+
+                    CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
+                    if (CalendarFragment.startdate < 1) {
+
+                        CalendarFragment.startdate += 7;
+                    }
+
+                    break;
+                case R.id.dialog_ra:
+                    CalendarFragment.startdate += CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
+                    if (CalendarFragment.startdate > 7) {
+                        CalendarFragment.startdate -= 7;
+                    }
+                    if (CalendarFragment.startmonth != 12) {
+                        CalendarFragment.startmonth++;
+                        isLeapYear();
+                    } else {
+                        CalendarFragment.year++;
+                        CalendarFragment.startmonth = 1;
+                    }
+                    break;
+
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_SHORT).show();
         }
     }
 

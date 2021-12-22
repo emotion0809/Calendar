@@ -45,6 +45,13 @@ public class SelectTimeDialog extends DialogFragment {
                     if (r == 0) {
                         TextView oImageView = new TextView(new ContextThemeWrapper(getContext(), R.style.calendar));
                         oImageView.setText(week[c]);
+                        oImageView.setClickable(true);
+                        oImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getContext(),"oImageView.getText()", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -93,7 +100,4 @@ public class SelectTimeDialog extends DialogFragment {
         return builder.create();
     }
 
-    public void OnClick_SelectTime(View view) {
-
-    }
 }

@@ -19,4 +19,9 @@
     <string name="end">結束\n時間</string>
     <string name="time">2021/12/19\t00:00</string>
     <string name="color">顏色</string>>
+    <string-array name="spinner">
+        <item>工作</item>
+        <item>活動</item>
+        <item>提醒</item>
+    </string-array>
 </resources>
