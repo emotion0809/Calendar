@@ -1,6 +1,7 @@
 package com.example.calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -8,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ public class NewRemindActivity extends AppCompatActivity {
     private static String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
     private SqlDataBaseHelper sqlDataBaseHelper;
+    public static View last_click;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -64,12 +67,14 @@ public class NewRemindActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
             sp.setAdapter(adapter);
             sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     // your code here
                     TextView tv = findViewById(R.id.text_startTime);
                     TextView ta = findViewById(R.id.text_endTime);
                     Button btn = findViewById(R.id.button_endTime);
+                    Button Sbtn = findViewById(R.id.button_startTime);
                     switch (sp.getSelectedItem().toString()) {
                         case "工作":
                             //????
@@ -83,7 +88,8 @@ public class NewRemindActivity extends AppCompatActivity {
                             tv.setText("開始時間");
                             ta.setText("結束時間");
                             btn.setClickable(true);
-                            btn.setText("WWW");
+                            CalendarFragment.setDate();
+                            btn.setText(String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日");
                             break;
                         case "提醒":
                             //????
@@ -93,6 +99,7 @@ public class NewRemindActivity extends AppCompatActivity {
                             btn.setText("");
                             break;
                     }
+                    Sbtn.setText(String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日");
                     //Toast.makeText(getApplicationContext(), String.format("%s", selectedItemView), Toast.LENGTH_SHORT).show();
                 }
 
@@ -113,6 +120,7 @@ public class NewRemindActivity extends AppCompatActivity {
     public void onClick_selectTime(View view) {
         DialogFragment newFragment = new SelectTimeDialog();
         newFragment.show(getSupportFragmentManager(), "selectTime");
+        last_click = view;
     }
 
     public void onClick_selectColor(View view) {
@@ -124,6 +132,22 @@ public class NewRemindActivity extends AppCompatActivity {
         try {
             switch (view.getId()) {
                 case R.id.dialog_la:
+                    if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
+                        SelectTimeDialog.startdate -= 29 % 7;
+                    } else {
+                        SelectTimeDialog.startdate -= CalendarFragment.month_days[SelectTimeDialog.month - 1] % 7;
+                    }
+
+                    if (SelectTimeDialog.startdate < 1) {
+                        SelectTimeDialog.startdate += 7;
+                    }
+                    if (SelectTimeDialog.month != 1) {
+                        SelectTimeDialog.month--;
+                    } else {
+                        SelectTimeDialog.year--;
+                        SelectTimeDialog.month = 12;
+                    }
+                    SelectTimeDialog.recount();
                     break;
                 case R.id.dialog_ra:
                     if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
@@ -150,22 +174,22 @@ public class NewRemindActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick_save(View view){
-        sqlDataBaseHelper = new SqlDataBaseHelper(this,DataBaseName,null,DataBaseVersion,DataBaseTable);
+    public void onClick_save(View view) {
+        sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
         db = sqlDataBaseHelper.getWritableDatabase();
         long id;
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title","A");
-        id = db.insert(DataBaseTable,null,contentValues);
-        Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable,null);
+        contentValues.put("title", "A");
+        id = db.insert(DataBaseTable, null, contentValues);
+        Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable, null);
         String titleArray[] = new String[c.getCount()];
         c.moveToFirst();
-        for(int i=0;i<c.getCount();i++){
+        for (int i = 0; i < c.getCount(); i++) {
             titleArray[i] = c.getString(1);
             c.moveToNext();
         }
 
-        Toast.makeText(this,titleArray[0],Toast.LENGTH_LONG).show();
+        Toast.makeText(this, titleArray[0], Toast.LENGTH_LONG).show();
     }
 
 }

@@ -44,15 +44,11 @@ public class CalendarFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         froot = root;
         init(root);
         return root;
-
-
     }
 
     @Override

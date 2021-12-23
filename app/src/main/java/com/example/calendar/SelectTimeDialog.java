@@ -3,6 +3,7 @@ package com.example.calendar;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.gridlayout.widget.GridLayout;
 
@@ -26,14 +28,17 @@ public class SelectTimeDialog extends DialogFragment {
     public static int startdate;
     public static boolean isLeap;
     public static TextView[] dialogTVs = new TextView[42];
+    public static View sroot;
+    public static String selected_time;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        month=CalendarFragment.startmonth;
-        year=CalendarFragment.year;
+        month = CalendarFragment.startmonth;
+        year = CalendarFragment.year;
         View root = getLayoutInflater().inflate(R.layout.dialog_select_time, null);
+        sroot = root;
         //日期選擇
         try {
             GridLayout gridLayout = (GridLayout) root.findViewById(R.id.grid_smallCalendar);
@@ -59,7 +64,20 @@ public class SelectTimeDialog extends DialogFragment {
                         gridLayout.addView(oImageView);
                     } else {
                         TextView oImageView = new TextView(new ContextThemeWrapper(getContext(), R.style.calendarDate));
-                        oImageView.setOnClickListener(v -> Toast.makeText(getContext(), String.format("%s", ((TextView) v).getText()), Toast.LENGTH_SHORT).show());
+                        oImageView.setOnClickListener(v -> {
+                            if (oImageView.getText() != "") {
+                                for (int r1 = 0; r1 < 6; r1++) {
+                                    for (int c1 = 0; c1 < 7; c1++) {
+                                        dialogTVs[r1 * 7 + c1].setBackground(null);
+                                        dialogTVs[r1 * 7 + c1].setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                    }
+                                }
+                                v.setBackgroundColor(Color.parseColor("#222222"));
+                                v.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
+                                selected_time = String.format("%s", CalendarFragment.year) + "年" + String.format("%s", CalendarFragment.startmonth) + "月" + oImageView.getText() + "日";
+                            }
+                        });
+                        /**/
                         if (r == 1 && c >= CalendarFragment.startdate - 1) {
                             oImageView.setText(String.format("%s", printdate));
                             printdate++;
@@ -69,11 +87,13 @@ public class SelectTimeDialog extends DialogFragment {
                         } else {
                             oImageView.setText("");
                         }
-                        dialogTVs[(r-1) * 7 + c] = oImageView;
+                        dialogTVs[(r - 1) * 7 + c] = oImageView;
+                        oImageView.setGravity(Gravity.CENTER);
                         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
                         param.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+                        oImageView.setPadding(0, 30, 0, 30);
                         //oImageView.setTextSize(10F);
                         //oImageView.setGravity(Gravity.CENTER_HORIZONTAL);
                         oImageView.setLayoutParams(param);
@@ -87,10 +107,12 @@ public class SelectTimeDialog extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             // sign in the user ...
+                            ((TextView) NewRemindActivity.last_click).setText(selected_time);
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            Toast.makeText(getContext(),"用戶已取消", Toast.LENGTH_LONG).show();
                             SelectTimeDialog.this.getDialog().cancel();
                         }
                     });
@@ -102,19 +124,22 @@ public class SelectTimeDialog extends DialogFragment {
     }
 
     public static void recount() {
+        TextView smtitle = sroot.findViewById(R.id.text_smallTitle);
+        smtitle.setText(String.format("%s", year) + "年" + String.format("%s", month) + "月");
         int printdate = 1;
         for (int r = 0; r < 7; r++) {
             for (int c = 0; c < 7; c++) {
                 if (r != 0) {
                     if (r == 1 && c >= startdate - 1) {
-                        dialogTVs[(r-1) * 7 + c].setText(String.format("%s", printdate));
+                        dialogTVs[(r - 1) * 7 + c].setText(String.format("%s", printdate));
                         printdate++;
                     } else if (r > 1 && printdate <= CalendarFragment.month_days[month - 1]) {
-                        dialogTVs[(r-1) * 7 + c].setText(String.format("%s", printdate));
+                        dialogTVs[(r - 1) * 7 + c].setText(String.format("%s", printdate));
                         printdate++;
                     } else {
-                        dialogTVs[(r-1) * 7 + c].setText("");
+                        dialogTVs[(r - 1) * 7 + c].setText("");
                     }
+                    dialogTVs[(r - 1) * 7 + c].setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
         }
