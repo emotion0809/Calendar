@@ -5,6 +5,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,12 @@ import android.widget.Toast;
 import com.example.calendar.ui.calendar.CalendarFragment;
 
 public class NewRemindActivity extends AppCompatActivity {
+
+    private static final String DataBaseName = "Calendar";
+    private static final int DataBaseVersion = 1;
+    private static String DataBaseTable = "Remind";
+    private static SQLiteDatabase db;
+    private SqlDataBaseHelper sqlDataBaseHelper;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -98,6 +107,7 @@ public class NewRemindActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), String.format("%s", ex), Toast.LENGTH_LONG).show();
         }
 
+
     }
 
     public void onClick_selectTime(View view) {
@@ -138,6 +148,24 @@ public class NewRemindActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onClick_save(View view){
+        sqlDataBaseHelper = new SqlDataBaseHelper(this,DataBaseName,null,DataBaseVersion,DataBaseTable);
+        db = sqlDataBaseHelper.getWritableDatabase();
+        long id;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title","A");
+        id = db.insert(DataBaseTable,null,contentValues);
+        Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable,null);
+        String titleArray[] = new String[c.getCount()];
+        c.moveToFirst();
+        for(int i=0;i<c.getCount();i++){
+            titleArray[i] = c.getString(1);
+            c.moveToNext();
+        }
+
+        Toast.makeText(this,titleArray[0],Toast.LENGTH_LONG).show();
     }
 
 }

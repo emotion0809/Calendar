@@ -30,10 +30,10 @@
     <style name="optionTitle2">
         <item name="android:textSize">20dp</item>
         <item name="android:padding">5dp</item>
-        <item name="android:gravity">left</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/optionTitle2</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_margin">5dp</item>
     </style>
 
     <style name="option">

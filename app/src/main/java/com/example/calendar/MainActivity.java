@@ -1,7 +1,10 @@
 package com.example.calendar;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.calendar.databinding.ActivityMainBinding;
 import com.example.calendar.ui.calendar.CalendarFragment;
+import com.facebook.stetho.Stetho;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        Stetho.initializeWithDefaults(this);
 
     }
 
