@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     CalendarFragment.startmonth--;
                 } else {
                     CalendarFragment.year--;
-                    isLeapYear();
+                    CalendarFragment.month_days[1] = isLeapYear(CalendarFragment.year);
                     CalendarFragment.startmonth = 12;
                 }
                 CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (CalendarFragment.startmonth != 12) {
                     CalendarFragment.startmonth++;
-                    isLeapYear();
+                    CalendarFragment.month_days[1] = isLeapYear(CalendarFragment.year);
                 } else {
                     CalendarFragment.year++;
                     CalendarFragment.startmonth = 1;
@@ -119,51 +119,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick_dialogAro(View view) {
-        try {
-            switch (view.getId()) {
-                case R.id.dialog_la:
-                    if (CalendarFragment.startmonth != 1) {
-                        CalendarFragment.startmonth--;
-                    } else {
-                        CalendarFragment.year--;
-                        isLeapYear();
-                        CalendarFragment.startmonth = 12;
-                    }
-                    //
 
-                    CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
-                    if (CalendarFragment.startdate < 1) {
-
-                        CalendarFragment.startdate += 7;
-                    }
-
-                    break;
-                case R.id.dialog_ra:
-                    CalendarFragment.startdate += CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
-                    if (CalendarFragment.startdate > 7) {
-                        CalendarFragment.startdate -= 7;
-                    }
-                    if (CalendarFragment.startmonth != 12) {
-                        CalendarFragment.startmonth++;
-                        isLeapYear();
-                    } else {
-                        CalendarFragment.year++;
-                        CalendarFragment.startmonth = 1;
-                    }
-                    break;
-
-            }
-        } catch (Exception ex) {
-            Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    void isLeapYear() {
-        if (CalendarFragment.year % 4 == 0 && CalendarFragment.year % 100 != 0) {
-            CalendarFragment.month_days[1] = 29;
+    public static int isLeapYear(int year) {
+        if (year % 4 == 0 && year % 100 != 0) {
+            return 29;
         } else {
-            CalendarFragment.month_days[1] = 28;
+            return 28;
         }
 
     }

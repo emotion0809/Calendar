@@ -18,6 +18,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.calendar.ui.calendar.CalendarFragment;
+
 public class NewRemindActivity extends AppCompatActivity {
 
     @Override
@@ -108,5 +110,34 @@ public class NewRemindActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "selectColor");
     }
 
+    public void onClick_dialogAro(View view) {
+        try {
+            switch (view.getId()) {
+                case R.id.dialog_la:
+                    break;
+                case R.id.dialog_ra:
+                    if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
+                        SelectTimeDialog.startdate += 29 % 7;
+                    } else {
+                        SelectTimeDialog.startdate += CalendarFragment.month_days[SelectTimeDialog.month - 1] % 7;
+                    }
+
+                    if (SelectTimeDialog.startdate > 7) {
+                        SelectTimeDialog.startdate -= 7;
+                    }
+                    if (SelectTimeDialog.month != 12) {
+                        SelectTimeDialog.month++;
+                    } else {
+                        SelectTimeDialog.year++;
+                        SelectTimeDialog.month = 1;
+                    }
+                    SelectTimeDialog.recount();
+                    break;
+
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

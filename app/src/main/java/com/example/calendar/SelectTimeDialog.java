@@ -21,13 +21,18 @@ public class SelectTimeDialog extends DialogFragment {
     String[] week = {"日", "一", "二", "三", "四", "五", "六"};
     final int row = 7;
     final int column = 7;
+    public static int month;
+    public static int year;
+    public static int startdate;
+    public static boolean isLeap;
+    public static TextView[] dialogTVs = new TextView[42];
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-
+        month=CalendarFragment.startmonth;
+        year=CalendarFragment.year;
         View root = getLayoutInflater().inflate(R.layout.dialog_select_time, null);
         //日期選擇
         try {
@@ -38,7 +43,7 @@ public class SelectTimeDialog extends DialogFragment {
             gridLayout.setRowCount(row + 1);
             int printdate = 1;
             TextView smtitle = root.findViewById(R.id.text_smallTitle);
-            smtitle.setText(String.format("%s", CalendarFragment.year)+"年"+String.format("%s", CalendarFragment.startmonth)+"月");
+            smtitle.setText(String.format("%s", CalendarFragment.year) + "年" + String.format("%s", CalendarFragment.startmonth) + "月");
             for (int r = 0; r < row; r++) {
                 for (int c = 0; c < column; c++) {
                     GridLayout.LayoutParams param = new GridLayout.LayoutParams();
@@ -46,12 +51,6 @@ public class SelectTimeDialog extends DialogFragment {
                         TextView oImageView = new TextView(new ContextThemeWrapper(getContext(), R.style.calendar));
                         oImageView.setText(week[c]);
                         oImageView.setClickable(true);
-                        oImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(),"oImageView.getText()", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -60,6 +59,7 @@ public class SelectTimeDialog extends DialogFragment {
                         gridLayout.addView(oImageView);
                     } else {
                         TextView oImageView = new TextView(new ContextThemeWrapper(getContext(), R.style.calendarDate));
+                        oImageView.setOnClickListener(v -> Toast.makeText(getContext(), String.format("%s", ((TextView) v).getText()), Toast.LENGTH_SHORT).show());
                         if (r == 1 && c >= CalendarFragment.startdate - 1) {
                             oImageView.setText(String.format("%s", printdate));
                             printdate++;
@@ -69,6 +69,7 @@ public class SelectTimeDialog extends DialogFragment {
                         } else {
                             oImageView.setText("");
                         }
+                        dialogTVs[(r-1) * 7 + c] = oImageView;
                         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
                         param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -100,4 +101,22 @@ public class SelectTimeDialog extends DialogFragment {
         return builder.create();
     }
 
+    public static void recount() {
+        int printdate = 1;
+        for (int r = 0; r < 7; r++) {
+            for (int c = 0; c < 7; c++) {
+                if (r != 0) {
+                    if (r == 1 && c >= startdate - 1) {
+                        dialogTVs[(r-1) * 7 + c].setText(String.format("%s", printdate));
+                        printdate++;
+                    } else if (r > 1 && printdate <= CalendarFragment.month_days[month - 1]) {
+                        dialogTVs[(r-1) * 7 + c].setText(String.format("%s", printdate));
+                        printdate++;
+                    } else {
+                        dialogTVs[(r-1) * 7 + c].setText("");
+                    }
+                }
+            }
+        }
+    }
 }
