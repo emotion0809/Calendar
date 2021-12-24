@@ -4,5 +4,5 @@
         android:width="1sp"
         android:color="@color/teal_700" />
     <solid
-        android:color="@color/backgroud" />
+        android:color="@color/background" />
 </shape>

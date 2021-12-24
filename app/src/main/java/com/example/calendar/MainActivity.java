@@ -1,16 +1,10 @@
 package com.example.calendar;
 
-
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.Toast;
 
 import com.example.calendar.databinding.ActivityMainBinding;
 import com.example.calendar.ui.calendar.CalendarFragment;
@@ -19,19 +13,12 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 
 public class MainActivity extends AppCompatActivity {
 

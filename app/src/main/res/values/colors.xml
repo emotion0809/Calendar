@@ -13,8 +13,8 @@
     <color name="optionTitle">#003D79</color>
     <color name="optionTitle2">#3C3C3C</color>
     <color name="option">#4F4F4F</color>
-    <color name="backgroud">#ECECFF</color>
-    <color name="broder">#DCDCEF</color>
-    <color name="broder_today">#55ACDF</color>
+    <color name="background">#ECECFF</color>
+    <color name="border">#DCDCEF</color>
+    <color name="border_today">#55ACDF</color>
     <color name="solid_today">#DCDCEF</color>
 </resources>

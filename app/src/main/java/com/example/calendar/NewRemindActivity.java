@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.calendar.ui.calendar.CalendarFragment;
+import com.facebook.stetho.Stetho;
 
 public class NewRemindActivity extends AppCompatActivity {
 
@@ -114,7 +115,7 @@ public class NewRemindActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), String.format("%s", ex), Toast.LENGTH_LONG).show();
         }
 
-
+        Stetho.initializeWithDefaults(this);
     }
 
     public void onClick_selectTime(View view) {
@@ -180,16 +181,28 @@ public class NewRemindActivity extends AppCompatActivity {
         long id;
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", "A");
+        contentValues.put("type", "工作");
+        contentValues.put("color", 1);
+        contentValues.put("isAllDay", "Y");
         id = db.insert(DataBaseTable, null, contentValues);
         Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable, null);
         String titleArray[] = new String[c.getCount()];
+        String typeArray[] = new String[c.getCount()];
+        int colorArray[] = new int[c.getCount()];
+        String isAllDayArray[] = new String[c.getCount()];
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
             titleArray[i] = c.getString(1);
+            typeArray[i] = c.getString(2);
+            colorArray[i] = c.getInt(3);
+            isAllDayArray[i] = c.getString(4);
             c.moveToNext();
         }
 
         Toast.makeText(this, titleArray[0], Toast.LENGTH_LONG).show();
+        System.out.println(typeArray[0]);
+        System.out.println(colorArray[0]);
+        System.out.println(isAllDayArray[0]);
     }
 
 }

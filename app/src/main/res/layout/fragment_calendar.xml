@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_rowWeight="1"
     tools:context=".ui.calendar.CalendarFragment"
-    android:background="@color/backgroud">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"

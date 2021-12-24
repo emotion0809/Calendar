@@ -1,7 +1,5 @@
 package com.example.calendar.ui.calendar;
 
-import android.graphics.Color;
-import android.graphics.pdf.PdfDocument;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -18,16 +15,12 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
-import androidx.viewpager.widget.PagerAdapter;
 
-import com.example.calendar.MainActivity;
 import com.example.calendar.R;
 import com.example.calendar.databinding.FragmentCalendarBinding;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class CalendarFragment extends Fragment {
@@ -110,9 +103,9 @@ public class CalendarFragment extends Fragment {
                 }
                 layout_date.addView(text_date);
                 if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate -1) {
-                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.broder_today));
+                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_today));
                 }else{
-                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.broder));
+                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border));
                 }
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = GridLayout.LayoutParams.WRAP_CONTENT;

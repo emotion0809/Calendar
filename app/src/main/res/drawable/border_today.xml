@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="2sp"
-        android:color="@color/broder_today"
+        android:color="@color/border_today"
         />
     <solid
         android:width="2sp"

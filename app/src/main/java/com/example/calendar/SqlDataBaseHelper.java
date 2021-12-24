@@ -17,17 +17,15 @@ public class SqlDataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL = "DROP TABLE Remind";
-        sqLiteDatabase.execSQL(SQL);
         String SqlTable = "CREATE TABLE IF NOT EXISTS Remind (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "title Text not null" +
-                /*"type TEXT not null," +
+                "title TEXT not null," +
+                "type TEXT not null," +
                 "color INTEGER not null," +
-                "isAllDay BOOlENA not null," +
+                "isAllDay TEXT not null," +
                 "startTime DATATIME," +
                 "endTime DATATIME " +
-                */ ")";
+                 ")";
         sqLiteDatabase.execSQL(SqlTable);
     }
 
