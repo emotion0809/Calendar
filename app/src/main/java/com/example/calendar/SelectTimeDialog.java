@@ -30,6 +30,9 @@ public class SelectTimeDialog extends DialogFragment {
     public static TextView[] dialogTVs = new TextView[42];
     public static View sroot;
     public static String selected_time;
+    public static int s_year;
+    public static int s_month;
+    public static int s_date;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class SelectTimeDialog extends DialogFragment {
                                 v.setBackgroundColor(Color.parseColor("#222222"));
                                 v.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
                                 selected_time = String.format("%s", year) + "年" + String.format("%s", month) + "月" + oImageView.getText() + "日";
+                                s_date = Integer.parseInt(oImageView.getText().toString());
                             }
                         });
                         /**/
@@ -108,11 +112,14 @@ public class SelectTimeDialog extends DialogFragment {
                         public void onClick(DialogInterface dialog, int id) {
                             // sign in the user ...
                             ((TextView) NewRemindActivity.last_click).setText(selected_time);
+                            s_year = year;
+                            s_month = month;
+                            //s_date=startdate;
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            Toast.makeText(getContext(),"用戶已取消", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "用戶已取消", Toast.LENGTH_LONG).show();
                             SelectTimeDialog.this.getDialog().cancel();
                         }
                     });

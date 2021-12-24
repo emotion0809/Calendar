@@ -23,9 +23,13 @@ public class SqlDataBaseHelper extends SQLiteOpenHelper {
                 "type TEXT not null," +
                 "color INTEGER not null," +
                 "isAllDay TEXT not null," +
-                "startTime DATATIME," +
-                "endTime DATATIME " +
-                 ")";
+                "startYear INTEGER not null," +
+                "startMonth INTEGER not null," +
+                "startDate INTEGER not null," +
+                "startHour INTEGER ," +
+                "startMinute INTEGER ," +
+                "endTime DATETIME" +
+                ")";
         sqLiteDatabase.execSQL(SqlTable);
     }
 

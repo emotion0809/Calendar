@@ -28,6 +28,8 @@ import android.widget.Toast;
 import com.example.calendar.ui.calendar.CalendarFragment;
 import com.facebook.stetho.Stetho;
 
+import java.time.LocalDateTime;
+
 public class NewRemindActivity extends AppCompatActivity {
 
     private static final String DataBaseName = "Calendar";
@@ -148,7 +150,7 @@ public class NewRemindActivity extends AppCompatActivity {
                 break;
         }
         v.setBackgroundColor(Color.parseColor("#FF0000"));
-       // SelectColorDialog.colorDl.cancel();
+        // SelectColorDialog.colorDl.cancel();
     }
 
     public void onClick_dialogAro(View view) {
@@ -197,31 +199,46 @@ public class NewRemindActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClick_save(View view) {
+        Button btn = findViewById(R.id.button_endTime);
+        Button Sbtn = findViewById(R.id.button_startTime);
         sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
         db = sqlDataBaseHelper.getWritableDatabase();
         long id;
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", "A");
+        LocalDateTime curTime = LocalDateTime.now();
+        contentValues.put("title", "B");
         contentValues.put("type", "工作");
         contentValues.put("color", 1);
         contentValues.put("isAllDay", "Y");
+        contentValues.put("startYear", SelectTimeDialog.s_year);
+        contentValues.put("startMonth", SelectTimeDialog.s_month);
+        contentValues.put("startDate", SelectTimeDialog.s_date);
         id = db.insert(DataBaseTable, null, contentValues);
         Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable, null);
         String titleArray[] = new String[c.getCount()];
         String typeArray[] = new String[c.getCount()];
         int colorArray[] = new int[c.getCount()];
         String isAllDayArray[] = new String[c.getCount()];
+        int startYear[] = new int[c.getCount()];
+        int startMonth[] = new int[c.getCount()];
+        int startDate[] = new int[c.getCount()];
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
             titleArray[i] = c.getString(1);
             typeArray[i] = c.getString(2);
             colorArray[i] = c.getInt(3);
             isAllDayArray[i] = c.getString(4);
+            startYear[i]=c.getInt(5);
+            startMonth[i]=c.getInt(6);
+            startDate[i]=c.getInt(7);
             c.moveToNext();
         }
 
-        Toast.makeText(this, titleArray[0], Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.format("%s", startYear[0]), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.format("%s", startMonth[0]), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.format("%s", startDate[0]), Toast.LENGTH_LONG).show();
         System.out.println(typeArray[0]);
         System.out.println(colorArray[0]);
         System.out.println(isAllDayArray[0]);
