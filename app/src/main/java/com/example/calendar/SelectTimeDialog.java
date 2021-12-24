@@ -74,7 +74,7 @@ public class SelectTimeDialog extends DialogFragment {
                                 }
                                 v.setBackgroundColor(Color.parseColor("#222222"));
                                 v.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
-                                selected_time = String.format("%s", CalendarFragment.year) + "年" + String.format("%s", CalendarFragment.startmonth) + "月" + oImageView.getText() + "日";
+                                selected_time = String.format("%s", year) + "年" + String.format("%s", month) + "月" + oImageView.getText() + "日";
                             }
                         });
                         /**/

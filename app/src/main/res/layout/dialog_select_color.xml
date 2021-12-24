@@ -11,10 +11,11 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/linear_blue"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onClick_selectColor"
+            android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
             <ImageView
@@ -41,10 +42,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_red"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onClick_selectColor"
+            android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
             <ImageView
@@ -78,10 +80,11 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/linear_green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onClick_selectColor"
+            android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
             <ImageView
@@ -108,10 +111,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_yellow"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onClick_selectColor"
+            android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
             <ImageView

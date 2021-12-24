@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -127,6 +129,26 @@ public class NewRemindActivity extends AppCompatActivity {
     public void onClick_selectColor(View view) {
         DialogFragment newFragment = new SelectColorDialog();
         newFragment.show(getSupportFragmentManager(), "selectColor");
+    }
+
+    public void onClick_dialogColor(View v) {
+        ImageView iv = findViewById(R.id.image_color);
+        switch (v.getId()) {
+            case R.id.linear_blue:
+                iv.setColorFilter(Color.parseColor("#0000FF"));
+                break;
+            case R.id.linear_red:
+                iv.setColorFilter(Color.parseColor("#FF0000"));
+                break;
+            case R.id.linear_yellow:
+                iv.setColorFilter(Color.parseColor("#FFFF00"));
+                break;
+            case R.id.linear_green:
+                iv.setColorFilter(Color.parseColor("#00FF00"));
+                break;
+        }
+        v.setBackgroundColor(Color.parseColor("#FF0000"));
+       // SelectColorDialog.colorDl.cancel();
     }
 
     public void onClick_dialogAro(View view) {
