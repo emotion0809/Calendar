@@ -39,6 +39,7 @@ public class NewRemindActivity extends AppCompatActivity {
     private static SQLiteDatabase db;
     private SqlDataBaseHelper sqlDataBaseHelper;
     public static View last_click;
+    public static LinearLayout lscl;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -134,23 +135,39 @@ public class NewRemindActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "selectColor");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClick_dialogColor(View v) {
-        ImageView iv = findViewById(R.id.image_color);
+        if (lscl != null) {
+            lscl.setBackground(ContextCompat.getDrawable(this, R.drawable.border_color));
+        }
         switch (v.getId()) {
             case R.id.linear_blue:
-                iv.setColorFilter(Color.parseColor("#0000FF"));
+                SelectColorDialog.selected_color = R.color.remind_blue;
                 break;
             case R.id.linear_red:
-                iv.setColorFilter(Color.parseColor("#FF0000"));
+                SelectColorDialog.selected_color = R.color.remind_red;
                 break;
             case R.id.linear_yellow:
-                iv.setColorFilter(Color.parseColor("#FFFF00"));
+                SelectColorDialog.selected_color = R.color.remind_yellow;
                 break;
             case R.id.linear_green:
-                iv.setColorFilter(Color.parseColor("#00FF00"));
+                SelectColorDialog.selected_color = R.color.remind_green;
+                break;
+            case R.id.linear_cyan:
+                SelectColorDialog.selected_color = R.color.remind_cyan;
+                break;
+            case R.id.linear_magenta:
+                SelectColorDialog.selected_color = R.color.remind_magenta;
+                break;
+            case R.id.linear_orange:
+                SelectColorDialog.selected_color = R.color.remind_orange;
+                break;
+            case R.id.linear_purple:
+                SelectColorDialog.selected_color = R.color.remind_purple;
                 break;
         }
         v.setBackground(ContextCompat.getDrawable(this, R.drawable.border_color_highlight));
+        lscl = (LinearLayout) v;
         // SelectColorDialog.colorDl.cancel();
     }
 
@@ -231,9 +248,9 @@ public class NewRemindActivity extends AppCompatActivity {
             typeArray[i] = c.getString(2);
             colorArray[i] = c.getInt(3);
             isAllDayArray[i] = c.getString(4);
-            startYear[i]=c.getInt(5);
-            startMonth[i]=c.getInt(6);
-            startDate[i]=c.getInt(7);
+            startYear[i] = c.getInt(5);
+            startMonth[i] = c.getInt(6);
+            startDate[i] = c.getInt(7);
             c.moveToNext();
         }
 
