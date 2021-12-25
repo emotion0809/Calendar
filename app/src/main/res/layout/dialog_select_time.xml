@@ -22,7 +22,8 @@
             android:minWidth="32dp"
             android:minHeight="32dp"
             android:onClick="onClick_dialogAro"
-            app:srcCompat="@drawable/ic_back_arrow" />
+            app:srcCompat="@drawable/ic_back_arrow"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/text_smallTitle"
@@ -40,16 +41,66 @@
             android:minWidth="32dp"
             android:minHeight="32dp"
             android:onClick="onClick_dialogAro"
-            app:srcCompat="@drawable/ic_forward_arrow" />
+            app:srcCompat="@drawable/ic_forward_arrow"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/grid_smallCalendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:columnCount="7"
         app:rowCount="7">
 
     </androidx.gridlayout.widget.GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layout_time">
+
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/time"
+            style="@style/optionTitle"/>
+
+        <Spinner
+            android:id="@+id/spinner_hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/text_hour"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/hour"
+            style="@style/option"/>
+
+        <Spinner
+            android:id="@+id/spinner_minute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/text_minute"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/minute"
+            style="@style/option"/>
+
+    </LinearLayout>
+
 </LinearLayout>

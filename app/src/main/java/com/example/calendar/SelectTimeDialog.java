@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,6 +104,13 @@ public class SelectTimeDialog extends DialogFragment {
                         gridLayout.addView(oImageView);
                     }
                 }
+            }
+            if(NewRemindActivity.isAllDay){
+                LinearLayout layout_time =(LinearLayout) root.findViewById(R.id.layout_time);
+                layout_time.setVisibility(View.INVISIBLE);
+            }else{
+                LinearLayout layout_time =(LinearLayout) root.findViewById(R.id.layout_time);
+                layout_time.setVisibility(View.VISIBLE);
             }
             builder.setView(root)
                     // Add action buttons

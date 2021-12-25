@@ -17,7 +17,7 @@
     <string name="type">類型</string>
     <string name="start">開始\n時間</string>
     <string name="end">結束\n時間</string>
-    <string name="time">2021/12/19\t00:00</string>
+    <string name="time">時間：</string>
     <string name="color">顏色</string>
     <string name="blue">藍色</string>
     <string name="red">紅色</string>
@@ -27,7 +27,9 @@
     <string name="purple">紫色</string>
     <string name="orange">橘色</string>
     <string name="cyan">青色</string>
-    <string name="save">儲存</string>>
+    <string name="save">儲存</string>
+    <string name="hour">點</string>
+    <string name="minute">分</string>
     <string-array name="spinner">
         <item>工作</item>
         <item>活動</item>

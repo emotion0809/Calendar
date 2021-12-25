@@ -40,6 +40,7 @@ public class NewRemindActivity extends AppCompatActivity {
     private SqlDataBaseHelper sqlDataBaseHelper;
     public static View last_click;
     public static LinearLayout lscl;
+    public static Boolean isAllDay = true;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -64,7 +65,9 @@ public class NewRemindActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
+                    isAllDay = true;
                 } else {
+                    isAllDay = false;
                 }
             }
         });
