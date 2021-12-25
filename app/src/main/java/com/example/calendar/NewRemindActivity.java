@@ -51,6 +51,7 @@ public class NewRemindActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +72,10 @@ public class NewRemindActivity extends AppCompatActivity {
                 }
             }
         });
+        CalendarFragment.setDate();
+        SelectTimeDialog.s_date = CalendarFragment.ymd[2];
+        SelectTimeDialog.s_month = CalendarFragment.ymd[1];
+        SelectTimeDialog.s_year = CalendarFragment.ymd[0];
         try {
             Spinner sp = this.findViewById(R.id.spinner_type);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner, android.R.layout.simple_spinner_item);
@@ -85,6 +90,20 @@ public class NewRemindActivity extends AppCompatActivity {
                     TextView ta = findViewById(R.id.text_endTime);
                     Button btn = findViewById(R.id.button_endTime);
                     Button Sbtn = findViewById(R.id.button_startTime);
+
+                    CalendarFragment.setDate();
+                    SelectTimeDialog.s_year = CalendarFragment.ymd[0];
+                    SelectTimeDialog.s_month = CalendarFragment.ymd[1];
+                    SelectTimeDialog.s_date = CalendarFragment.ymd[2];
+                    SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
+                    SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
+                    SelectTimeDialog.selected_time = String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日      ";
+                    SelectTimeDialog.selected_hm = timeFormatter(CalendarFragment.ymd[3], CalendarFragment.ymd[4]);
+                    if (isAllDay) {
+                        Sbtn.setText(SelectTimeDialog.selected_time);
+                    } else {
+                        Sbtn.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
+                    }
                     switch (sp.getSelectedItem().toString()) {
                         case "工作":
                             //????
@@ -99,7 +118,15 @@ public class NewRemindActivity extends AppCompatActivity {
                             ta.setText("結束時間");
                             btn.setClickable(true);
                             CalendarFragment.setDate();
-                            btn.setText(String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日");
+                            if (isAllDay) {
+                                btn.setText(SelectTimeDialog.selected_time);
+                            } else {
+                                if (CalendarFragment.ymd[4] + 30 >= 60) {
+                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(CalendarFragment.ymd[3] + 1, CalendarFragment.ymd[4] - 30));
+                                    //////////////尚未製作跨日轉換
+                                }
+
+                            }
                             break;
                         case "提醒":
                             //????
@@ -109,7 +136,7 @@ public class NewRemindActivity extends AppCompatActivity {
                             btn.setText("");
                             break;
                     }
-                    Sbtn.setText(String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日");
+
                     //Toast.makeText(getApplicationContext(), String.format("%s", selectedItemView), Toast.LENGTH_SHORT).show();
                 }
 
@@ -178,6 +205,12 @@ public class NewRemindActivity extends AppCompatActivity {
         try {
             switch (view.getId()) {
                 case R.id.dialog_la:
+                    if (SelectTimeDialog.month != 1) {
+                        SelectTimeDialog.month--;
+                    } else {
+                        SelectTimeDialog.year--;
+                        SelectTimeDialog.month = 12;
+                    }
                     if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
                         SelectTimeDialog.startdate -= 29 % 7;
                     } else {
@@ -186,12 +219,6 @@ public class NewRemindActivity extends AppCompatActivity {
 
                     if (SelectTimeDialog.startdate < 1) {
                         SelectTimeDialog.startdate += 7;
-                    }
-                    if (SelectTimeDialog.month != 1) {
-                        SelectTimeDialog.month--;
-                    } else {
-                        SelectTimeDialog.year--;
-                        SelectTimeDialog.month = 12;
                     }
                     SelectTimeDialog.recount();
                     break;
@@ -218,6 +245,18 @@ public class NewRemindActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static String timeFormatter(int hour, int minute) {
+        String formated = String.format("%s", hour) + ":";
+        if (hour < 10) {
+            formated = "0" + formated;
+        }
+        if (minute < 10) {
+            formated = formated + "0";
+        }
+        formated = formated + String.format("%s", minute);
+        return formated;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

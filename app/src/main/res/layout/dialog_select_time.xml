@@ -61,21 +61,16 @@
         android:orientation="horizontal"
         android:id="@+id/layout_time">
 
-        <TextView
-            android:id="@+id/text_time"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/time"
-            style="@style/optionTitle"/>
 
-        <Spinner
-            android:id="@+id/spinner_hour"
+        <EditText
+            android:id="@+id/editText_hour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
             android:minHeight="48dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:text="0" />
 
         <TextView
             android:id="@+id/text_hour"
@@ -85,13 +80,15 @@
             android:text="@string/hour"
             style="@style/option"/>
 
-        <Spinner
-            android:id="@+id/spinner_minute"
+        <EditText
+            android:id="@+id/editText_minute"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
             android:minHeight="48dp"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            android:text="0" />
 
         <TextView
             android:id="@+id/text_minute"

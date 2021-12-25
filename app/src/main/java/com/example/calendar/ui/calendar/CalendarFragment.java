@@ -32,7 +32,7 @@ public class CalendarFragment extends Fragment {
     public static int year = 2021;
     public static int[] month_days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public static View froot;
-    public static int[] ymd = {0, 0, 0};
+    public static int[] ymd = {0, 0, 0, 0, 0};
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,7 +52,7 @@ public class CalendarFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void setDate(){
+    public static void setDate() {
         LocalDateTime curTime = LocalDateTime.now();
         DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy", Locale.TAIWAN);
         ymd[0] = Integer.parseInt(formmat1.format(curTime));
@@ -60,6 +60,10 @@ public class CalendarFragment extends Fragment {
         ymd[1] = Integer.parseInt(formmat1.format(curTime));
         formmat1 = DateTimeFormatter.ofPattern("dd", Locale.TAIWAN);
         ymd[2] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("HH", Locale.TAIWAN);
+        ymd[3] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("mm", Locale.TAIWAN);
+        ymd[4] = Integer.parseInt(formmat1.format(curTime));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -102,9 +106,9 @@ public class CalendarFragment extends Fragment {
                     text_date.setText("");
                 }
                 layout_date.addView(text_date);
-                if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate -1) {
+                if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate - 1) {
                     layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_today));
-                }else{
+                } else {
                     layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border));
                 }
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();

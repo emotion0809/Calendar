@@ -28,8 +28,11 @@ public class SqlDataBaseHelper extends SQLiteOpenHelper {
                 "startDate INTEGER not null," +
                 "startHour INTEGER ," +
                 "startMinute INTEGER ," +
-                "endTime DATETIME" +
-                ")";
+                "endYear INTEGER not null," +
+                "endMonth INTEGER not null," +
+                "endDate INTEGER not null," +
+                "endHour INTEGER ," +
+                "endMinute INTEGER " + ")";
         sqLiteDatabase.execSQL(SqlTable);
     }
 
