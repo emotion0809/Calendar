@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/border.xml" value="0.13518518518518519" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/border_color.xml" value="0.13518518518518519" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/border_color_highlight.xml" value="0.13518518518518519" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/border_today.xml" value="0.13518518518518519" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/broder._today.xml" value="0.12962962962962962" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/broder.xml" value="0.12962962962962962" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/broder_today.xml" value="0.12962962962962962" />
@@ -24,7 +28,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/content_main.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/diallog_select_time.xml" value="0.2574074074074074" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_new_remind.xml" value="0.33" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_color.xml" value="0.22" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_color.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_time.xml" value="0.2" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/fragment_calendar.xml" value="0.16" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/layout_time.xml" value="0.33" />

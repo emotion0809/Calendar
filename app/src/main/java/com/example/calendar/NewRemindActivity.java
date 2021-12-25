@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.ContentValues;
@@ -149,7 +150,7 @@ public class NewRemindActivity extends AppCompatActivity {
                 iv.setColorFilter(Color.parseColor("#00FF00"));
                 break;
         }
-        v.setBackgroundColor(Color.parseColor("#FF0000"));
+        v.setBackground(ContextCompat.getDrawable(this, R.drawable.border_color_highlight));
         // SelectColorDialog.colorDl.cancel();
     }
 

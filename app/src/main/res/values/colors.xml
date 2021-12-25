@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#AAAAAA</color>
 
     <color name="blue_1">#4A4AFF</color>
     <color name="hint">#757575</color>
@@ -17,4 +18,12 @@
     <color name="border">#DCDCEF</color>
     <color name="border_today">#55ACDF</color>
     <color name="solid_today">#DCDCEF</color>
+    <color name="remind_blue">#FF5555FF</color>
+    <color name="remind_red">#FFFF5555</color>
+    <color name="remind_green">#FF55FF55</color>
+    <color name="remind_magenta">#FFEE33EE</color>
+    <color name="remind_cyan">#FF33EEEE</color>
+    <color name="remind_yellow">#FFEEEE33</color>
+    <color name="remind_purple">#FFAA00AA</color>
+    <color name="remind_orange">#FFFF8000</color>
 </resources>

@@ -19,6 +19,14 @@
     <string name="end">結束\n時間</string>
     <string name="time">2021/12/19\t00:00</string>
     <string name="color">顏色</string>
+    <string name="blue">藍色</string>
+    <string name="red">紅色</string>
+    <string name="green">綠色</string>
+    <string name="yellow">黃色</string>
+    <string name="magenta">洋紅色</string>
+    <string name="purple">紫色</string>
+    <string name="orange">橘色</string>
+    <string name="cyan">青色</string>
     <string name="save">儲存</string>>
     <string-array name="spinner">
         <item>工作</item>
