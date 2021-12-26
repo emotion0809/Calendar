@@ -1,34 +1,49 @@
 package com.example.calendar.ui.calendar;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.gridlayout.widget.GridLayout;
 
+import com.example.calendar.CalendarConfirgureDialog;
+import com.example.calendar.MainActivity;
+import com.example.calendar.NewRemindActivity;
 import com.example.calendar.R;
 import com.example.calendar.Remind;
+import com.example.calendar.SelectColorDialog;
 import com.example.calendar.SqlDataBaseHelper;
 import com.example.calendar.databinding.FragmentCalendarBinding;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class CalendarFragment extends Fragment {
 
+    private static LayoutInflater inflater;
     private FragmentCalendarBinding binding;
     public static int yearsTillLeapYear;
     public static int startdate = 4;
@@ -37,6 +52,7 @@ public class CalendarFragment extends Fragment {
     public static int[] month_days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public static View froot;
     public static int[] ymd = {0, 0, 0, 0, 0};
+    public static int modify_index;
     //DataBase
     private static final String DataBaseName = "Calendar";
     private static final int DataBaseVersion = 1;
@@ -45,7 +61,9 @@ public class CalendarFragment extends Fragment {
     private static SqlDataBaseHelper sqlDataBaseHelper;
     //
     public static LinearLayout[] layout_date = new LinearLayout[31];
-    public static int[] colorBaground = {R.drawable.remind_blue,R.drawable.remind_red};
+    public static int[] colorBaground = {R.drawable.remind_blue, R.drawable.remind_red};
+
+    MainActivity ma = new MainActivity();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -54,6 +72,23 @@ public class CalendarFragment extends Fragment {
         View root = binding.getRoot();
         froot = root;
         init(root);
+
+        sqlDataBaseHelper = new SqlDataBaseHelper(froot.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
+        db = sqlDataBaseHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s Where startYear = %d AND startMonth = %d ORDER BY startDate", DataBaseTable, year, startmonth), null);
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            CalendarFragment.layout_date[cursor.getInt(7) - 1].setOnClickListener(
+                    v -> {
+                        //點擊按鈕
+                        //modify_index = cursor.getInt(7) - 1;
+                        DialogFragment df = new CalendarConfirgureDialog();
+                        df.show(getFragmentManager(), "");
+
+                    }
+            );
+            cursor.moveToNext();
+        }
         return root;
     }
 
@@ -145,11 +180,17 @@ public class CalendarFragment extends Fragment {
             text_remind.setBackground(ContextCompat.getDrawable(root.getContext(), colorBaground[cursor.getInt(3)]));
             text_remind.setText(cursor.getString(1));
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-            param.setMargins(10,10,10,10);
+            param.setMargins(0, 10, 0, 10);
             param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            param.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.width = GridLayout.LayoutParams.MATCH_PARENT;
             text_remind.setLayoutParams(param);
+            text_remind.setSingleLine(true);
+            text_remind.setWidth(70);
+            text_remind.setGravity(Gravity.CENTER);
+            text_remind.setEllipsize(TextUtils.TruncateAt.END);
+            //text_remind.setMaxEms(5);
             CalendarFragment.layout_date[cursor.getInt(7) - 1].addView(text_remind);
+
             cursor.moveToNext();
         }
     }

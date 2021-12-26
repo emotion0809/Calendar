@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,5 +118,10 @@ public class MainActivity extends AppCompatActivity {
             return 28;
         }
 
+    }
+
+    public void openDDC() {
+        DialogFragment newFragment = new SelectColorDialog();
+        newFragment.show(getSupportFragmentManager(), "selectColor");
     }
 }

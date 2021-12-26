@@ -52,6 +52,13 @@ public class NewRemindActivity extends AppCompatActivity {
     public static View last_click;
     public static LinearLayout lscl;
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(this, "BACK", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //返回建觸發
@@ -69,18 +76,40 @@ public class NewRemindActivity extends AppCompatActivity {
         //新增返回建
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //初始化時間設定!!!!!!!!!!!!!!!!! ----這個程式碼由Dvlpsk_feqma提供
+        if (CalendarConfirgureDialog.moding_Database) {
+            actionBar.setTitle("修改" + CalendarConfirgureDialog.name_modifier + "的資料");
+        } else {
+            actionBar.setTitle("新增記事");
+        }
+
+        //初始化時間設定!!!!!!!!!!!!!!!!! ----這個程式碼由Dvlpsk_feqma提供 PLUS+++
         CalendarFragment.setDate();
-        SelectTimeDialog.s_date = CalendarFragment.ymd[2];
-        SelectTimeDialog.s_month = CalendarFragment.ymd[1];
-        SelectTimeDialog.s_year = CalendarFragment.ymd[0];
-        SelectTimeDialog.e_date = CalendarFragment.ymd[2];
-        SelectTimeDialog.e_month = CalendarFragment.ymd[1];
-        SelectTimeDialog.e_year = CalendarFragment.ymd[0];
-        SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
-        SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
-        SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
-        SelectTimeDialog.e_minute = CalendarFragment.ymd[4];
+        if (CalendarConfirgureDialog.moding_Database) {
+            //把資料庫的東西放這裡!!!
+            /*SelectTimeDialog.s_date = CalendarFragment.ymd[2];
+            SelectTimeDialog.s_month = CalendarFragment.ymd[1];
+            SelectTimeDialog.s_year = CalendarFragment.ymd[0];
+            SelectTimeDialog.e_date = CalendarFragment.ymd[2];
+            SelectTimeDialog.e_month = CalendarFragment.ymd[1];
+            SelectTimeDialog.e_year = CalendarFragment.ymd[0];
+            SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
+            SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
+            SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
+            SelectTimeDialog.e_minute = CalendarFragment.ymd[4];*/
+        } else {
+            //使用預設資料(新增記事)
+            SelectTimeDialog.s_date = CalendarFragment.ymd[2];
+            SelectTimeDialog.s_month = CalendarFragment.ymd[1];
+            SelectTimeDialog.s_year = CalendarFragment.ymd[0];
+            SelectTimeDialog.e_date = CalendarFragment.ymd[2];
+            SelectTimeDialog.e_month = CalendarFragment.ymd[1];
+            SelectTimeDialog.e_year = CalendarFragment.ymd[0];
+            SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
+            SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
+            SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
+            SelectTimeDialog.e_minute = CalendarFragment.ymd[4];
+
+        }
         if (SelectTimeDialog.s_minute + 30 > 59) {
             SelectTimeDialog.e_minute -= 30;
             SelectTimeDialog.e_hour++;
@@ -88,6 +117,7 @@ public class NewRemindActivity extends AppCompatActivity {
             SelectTimeDialog.e_minute += 30;
             //SelectTimeDialog.e_hour = SelectTimeDialog.s_hour;
         }
+        CalendarConfirgureDialog.moding_Database = false;
         //switch建觸發(AllDay)
         Switch switch_allDay = (Switch) findViewById(R.id.switch_allDay);
         switch_allDay.setChecked(true);
@@ -143,6 +173,7 @@ public class NewRemindActivity extends AppCompatActivity {
                     switch (type = sp.getSelectedItem().toString()) {
                         case "工作":
                             //????
+                            SelectTimeDialog.notRequireCheck = true;
                             tv.setText("截止時間");
                             ta.setVisibility(View.INVISIBLE);
                             btn.setClickable(false);
@@ -150,6 +181,7 @@ public class NewRemindActivity extends AppCompatActivity {
                             break;
                         case "活動":
                             //????
+                            SelectTimeDialog.notRequireCheck = false;
                             tv.setText("開始時間");
                             ta.setVisibility(View.VISIBLE);
                             ta.setText("結束時間");
@@ -169,6 +201,7 @@ public class NewRemindActivity extends AppCompatActivity {
                             break;
                         case "提醒":
                             //????
+                            SelectTimeDialog.notRequireCheck = true;
                             tv.setText("提醒時間");
                             ta.setVisibility(View.INVISIBLE);
                             btn.setClickable(false);

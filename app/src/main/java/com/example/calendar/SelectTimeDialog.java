@@ -32,6 +32,7 @@ public class SelectTimeDialog extends DialogFragment {
     String[] week = {"日", "一", "二", "三", "四", "五", "六"};
     final int row = 7;
     final int column = 7;
+    public static boolean notRequireCheck = true;
     public static int month;
     public static int year;
     public static int startdate = CalendarFragment.startdate;
@@ -202,42 +203,49 @@ public class SelectTimeDialog extends DialogFragment {
                         public void onClick(DialogInterface dialog, int id) {
                             //日期檢定
                             boolean startEndCheckPass = false;
-                            if (e_year == s_year) {
-                                if (e_month == s_month) {
-                                    if (e_date == s_date) {
-                                        if (e_hour == s_hour) {
-                                            if (e_minute > s_minute) {
-                                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                            int[] res_ym = {s_year, s_month};
+                            int[] ree_ym = {e_year, e_month};
+                            if (!notRequireCheck) {
+                                if (isStart) {
+                                    s_year = year;
+                                    s_month = month;
+                                } else {
+                                    e_year = year;
+                                    e_month = month;
+                                }
+                                if (e_year == s_year) {
+                                    if (e_month == s_month) {
+                                        if (e_date == s_date) {
+                                            if (e_hour == s_hour) {
+                                                if (e_minute > s_minute) {
+                                                    startEndCheckPass = true;
+                                                } else if (e_minute < s_minute) {
+                                                    Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
+                                                }
+                                            } else if (e_hour > s_hour) {
                                                 startEndCheckPass = true;
-                                            } else if (e_minute < s_minute){
+                                            } else if (e_hour < s_hour) {
                                                 Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                                             }
-                                        } else if (e_hour > s_hour) {
-                                            ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                        } else if (e_date > s_date) {
                                             startEndCheckPass = true;
-                                        } else if (e_hour < s_hour){
+                                        } else if (e_date < s_date) {
                                             Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                                         }
-                                    } else if (e_date > s_date) {
-                                        ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                    } else if (e_month > s_month) {
                                         startEndCheckPass = true;
-                                    } else if (e_date < s_date){
+                                    } else if (e_month < s_month) {
                                         Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                                     }
-                                } else if (e_month > s_month) {
-                                    ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                } else if (e_year > s_year) {
                                     startEndCheckPass = true;
-                                } else if (e_month < s_month) {
+                                } else {
                                     Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                                 }
-                            } else if (e_year > s_year) {
-                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
-                                startEndCheckPass = true;
-                            } else {
-                                Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                             }
+
                             // sign in the user ...
-                            if (startEndCheckPass) {
+                            if (startEndCheckPass || notRequireCheck) {
                                 if (isStart) {
                                     s_year = year;
                                     s_month = month;
@@ -269,12 +277,22 @@ public class SelectTimeDialog extends DialogFragment {
                                     } else {
                                         e_minute = Integer.parseInt(etminute.getText().toString());
                                     }
-                                    if (NewRemindActivity.isAllDay.matches("N")) {
+                                    if (NewRemindActivity.isAllDay.matches("Y")) {
                                         selected_hm = "";
                                     } else {
                                         selected_hm = NewRemindActivity.timeFormatter(e_hour, e_minute);
                                     }
                                 }
+                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                            } else {
+                                if (isStart) {
+                                    s_year = res_ym[0];
+                                    s_month = res_ym[1];
+                                } else {
+                                    e_year = ree_ym[0];
+                                    e_month = ree_ym[1];
+                                }
+
                             }
 
 
