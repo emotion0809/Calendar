@@ -175,7 +175,7 @@ public class SelectTimeDialog extends DialogFragment {
                     }
                 }
             });
-            if (NewRemindActivity.isAllDay) {
+            if (NewRemindActivity.isAllDay.matches("Y") ) {
                 LinearLayout layout_time = (LinearLayout) root.findViewById(R.id.layout_time);
                 layout_time.setVisibility(View.INVISIBLE);
             } else {
@@ -202,8 +202,21 @@ public class SelectTimeDialog extends DialogFragment {
                                     s_minute = Integer.parseInt(etminute.getText().toString());
                                 }
 
+                            }else{
+                                e_year = year;
+                                e_month = month;
+                                if (Integer.parseInt(etgohome.getText().toString()) > 23 || Integer.parseInt(etgohome.getText().toString()) < 0) {
+                                    Toast.makeText(getContext(), "Fuck!You've insert invalid hour,BAKA!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    e_hour = Integer.parseInt(etgohome.getText().toString());
+                                }
+                                if (Integer.parseInt(etminute.getText().toString()) > 59 || Integer.parseInt(etminute.getText().toString()) < 0) {
+                                    Toast.makeText(getContext(), "Fuck!You've insert invalid minute,BAKA!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    e_minute = Integer.parseInt(etminute.getText().toString());
+                                }
                             }
-                            if (NewRemindActivity.isAllDay) {
+                            if (NewRemindActivity.isAllDay.matches("Y")) {
                                 selected_hm = "";
                             } else {
                                 selected_hm = NewRemindActivity.timeFormatter(s_hour, s_minute);

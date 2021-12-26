@@ -8,17 +8,20 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -33,14 +36,21 @@ import java.time.LocalDateTime;
 
 public class NewRemindActivity extends AppCompatActivity {
 
+    //DataBase
     private static final String DataBaseName = "Calendar";
     private static final int DataBaseVersion = 1;
-    private static String DataBaseTable = "Remind";
+    private static final String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
     private SqlDataBaseHelper sqlDataBaseHelper;
+    //Remind DataBase
+    public static String title;
+    public static String type;
+    public static int color;
+    public static String isAllDay = "Y";
+    public static int Time[][] = new int[2][5];
+
     public static View last_click;
     public static LinearLayout lscl;
-    public static Boolean isAllDay = true;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -66,9 +76,17 @@ public class NewRemindActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    isAllDay = true;
+                    isAllDay = "Y";
+                    Button button_startTime = (Button) findViewById(R.id.button_startTime);
+                    Button button_endTime = (Button) findViewById(R.id.button_endTime);
+                    button_startTime.setText(SelectTimeDialog.selected_time);
+                    button_endTime.setText(SelectTimeDialog.selected_time);
                 } else {
-                    isAllDay = false;
+                    isAllDay = "N";
+                    Button button_startTime = (Button) findViewById(R.id.button_startTime);
+                    Button button_endTime = (Button) findViewById(R.id.button_endTime);
+                    button_startTime.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
+                    button_endTime.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
                 }
             }
         });
@@ -99,41 +117,44 @@ public class NewRemindActivity extends AppCompatActivity {
                     SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
                     SelectTimeDialog.selected_time = String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日      ";
                     SelectTimeDialog.selected_hm = timeFormatter(CalendarFragment.ymd[3], CalendarFragment.ymd[4]);
-                    if (isAllDay) {
+                    if (isAllDay.matches("Y") ) {
                         Sbtn.setText(SelectTimeDialog.selected_time);
                     } else {
                         Sbtn.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
                     }
-                    switch (sp.getSelectedItem().toString()) {
+                    switch (type = sp.getSelectedItem().toString()) {
                         case "工作":
                             //????
                             tv.setText("截止時間");
-                            ta.setText("");
+                            ta.setVisibility(View.INVISIBLE);
                             btn.setClickable(false);
-                            btn.setText("");
+                            btn.setVisibility(View.INVISIBLE);
                             break;
                         case "活動":
                             //????
                             tv.setText("開始時間");
+                            ta.setVisibility(View.VISIBLE);
                             ta.setText("結束時間");
                             btn.setClickable(true);
+                            btn.setVisibility(View.VISIBLE);
                             CalendarFragment.setDate();
-                            if (isAllDay) {
+                            if (isAllDay.matches("Y") ) {
                                 btn.setText(SelectTimeDialog.selected_time);
                             } else {
                                 if (CalendarFragment.ymd[4] + 30 >= 60) {
                                     btn.setText(SelectTimeDialog.selected_time + timeFormatter(CalendarFragment.ymd[3] + 1, CalendarFragment.ymd[4] - 30));
                                     //////////////尚未製作跨日轉換
+                                } else {
+                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(CalendarFragment.ymd[3], CalendarFragment.ymd[4] + 30));
                                 }
-
                             }
                             break;
                         case "提醒":
                             //????
                             tv.setText("提醒時間");
-                            ta.setText("");
+                            ta.setVisibility(View.INVISIBLE);
                             btn.setClickable(false);
-                            btn.setText("");
+                            btn.setVisibility(View.INVISIBLE);
                             break;
                     }
 
@@ -196,6 +217,7 @@ public class NewRemindActivity extends AppCompatActivity {
                 SelectColorDialog.selected_color = R.color.remind_purple;
                 break;
         }
+        color = SelectColorDialog.selected_color;
         v.setBackground(ContextCompat.getDrawable(this, R.drawable.border_color_highlight));
         lscl = (LinearLayout) v;
         // SelectColorDialog.colorDl.cancel();
@@ -259,49 +281,50 @@ public class NewRemindActivity extends AppCompatActivity {
         return formated;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClick_save(View view) {
-        Button btn = findViewById(R.id.button_endTime);
-        Button Sbtn = findViewById(R.id.button_startTime);
+        //開啟資料庫
         sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
         db = sqlDataBaseHelper.getWritableDatabase();
-        long id;
-        ContentValues contentValues = new ContentValues();
-        LocalDateTime curTime = LocalDateTime.now();
-        contentValues.put("title", "B");
-        contentValues.put("type", "工作");
-        contentValues.put("color", 1);
-        contentValues.put("isAllDay", "Y");
-        contentValues.put("startYear", SelectTimeDialog.s_year);
-        contentValues.put("startMonth", SelectTimeDialog.s_month);
-        contentValues.put("startDate", SelectTimeDialog.s_date);
-        id = db.insert(DataBaseTable, null, contentValues);
-        Cursor c = db.rawQuery("SELECT * FROM " + DataBaseTable, null);
-        String titleArray[] = new String[c.getCount()];
-        String typeArray[] = new String[c.getCount()];
-        int colorArray[] = new int[c.getCount()];
-        String isAllDayArray[] = new String[c.getCount()];
-        int startYear[] = new int[c.getCount()];
-        int startMonth[] = new int[c.getCount()];
-        int startDate[] = new int[c.getCount()];
-        c.moveToFirst();
-        for (int i = 0; i < c.getCount(); i++) {
-            titleArray[i] = c.getString(1);
-            typeArray[i] = c.getString(2);
-            colorArray[i] = c.getInt(3);
-            isAllDayArray[i] = c.getString(4);
-            startYear[i] = c.getInt(5);
-            startMonth[i] = c.getInt(6);
-            startDate[i] = c.getInt(7);
-            c.moveToNext();
+        //取得Title
+        EditText editText_title = (EditText) findViewById(R.id.editText_Title);
+        title = editText_title.getText().toString();
+        System.out.println(editText_title.getText().toString());
+        //取得時間
+        Time[0][0] = SelectTimeDialog.s_year;
+        Time[0][1] = SelectTimeDialog.s_month;
+        Time[0][2] = SelectTimeDialog.s_date;
+        Time[0][3] = SelectTimeDialog.s_hour;
+        Time[0][4] = SelectTimeDialog.s_minute;
+        Time[1][0] = SelectTimeDialog.e_year;
+        Time[1][1] = SelectTimeDialog.e_month;
+        Time[1][2] = SelectTimeDialog.e_date;
+        Time[1][3] = SelectTimeDialog.e_hour;
+        Time[1][4] = SelectTimeDialog.e_minute;
+        if (! title.matches("")) {
+            //insert
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("title", title);
+            contentValues.put("type", type);
+            contentValues.put("color", color);
+            contentValues.put("isAllDay", isAllDay);
+            contentValues.put("startYear", Time[0][0]);
+            contentValues.put("startMonth", Time[0][1]);
+            contentValues.put("startDate", Time[0][2]);
+            contentValues.put("startHour", Time[0][3]);
+            contentValues.put("startMinute", Time[0][4]);
+            contentValues.put("endYear", Time[1][0]);
+            contentValues.put("endMonth", Time[1][1]);
+            contentValues.put("endDate", Time[1][2]);
+            contentValues.put("endHour", Time[1][3]);
+            contentValues.put("endMinute", Time[1][4]);
+            //回到主頁面
+            db.insert(DataBaseTable, null, contentValues);
+            Intent intent = new Intent();
+            intent.setClass(NewRemindActivity.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this,"標題不能空白",Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(this, String.format("%s", startYear[0]), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, String.format("%s", startMonth[0]), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, String.format("%s", startDate[0]), Toast.LENGTH_LONG).show();
-        System.out.println(typeArray[0]);
-        System.out.println(colorArray[0]);
-        System.out.println(isAllDayArray[0]);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.calendar.ui.calendar;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.example.calendar.R;
+import com.example.calendar.Remind;
+import com.example.calendar.SqlDataBaseHelper;
 import com.example.calendar.databinding.FragmentCalendarBinding;
 
 import java.time.LocalDateTime;
@@ -33,6 +37,14 @@ public class CalendarFragment extends Fragment {
     public static int[] month_days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public static View froot;
     public static int[] ymd = {0, 0, 0, 0, 0};
+    //DataBase
+    private static final String DataBaseName = "Calendar";
+    private static final int DataBaseVersion = 1;
+    private static final String DataBaseTable = "Remind";
+    private static SQLiteDatabase db;
+    private static SqlDataBaseHelper sqlDataBaseHelper;
+    //
+    public static LinearLayout[] layout_date = new LinearLayout[31];
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -101,11 +113,13 @@ public class CalendarFragment extends Fragment {
                 TextView text_date = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
                 if (r == 1 && c >= startdate - 1 || r > 1 && printdate <= month_days[startmonth - 1]) {
                     text_date.setText(String.format("%d", printdate));
+                    CalendarFragment.layout_date[printdate - 1] = layout_date;
                     printdate++;
                 } else {
                     text_date.setText("");
                 }
                 layout_date.addView(text_date);
+                //標記當天
                 if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate - 1) {
                     layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_today));
                 } else {
@@ -119,6 +133,20 @@ public class CalendarFragment extends Fragment {
                 layout_date.setLayoutParams(param);
                 gridLayout.addView(layout_date);
             }
+        }
+        //提醒
+        joinRemind();
+    }
+
+    public static void joinRemind() {
+        sqlDataBaseHelper = new SqlDataBaseHelper(froot.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
+        db = sqlDataBaseHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s Where startYear = %d AND startMonth = %d ORDER BY startDate", DataBaseTable, year, startmonth), null);
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            TextView text_remind = new TextView(froot.getContext());
+            text_remind.setText(cursor.getString(1));
+            CalendarFragment.layout_date[cursor.getInt(7)].addView(text_remind);
         }
     }
 }
