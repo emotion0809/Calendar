@@ -212,30 +212,37 @@ public class NewRemindActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.linear_blue:
                 SelectColorDialog.selected_color = R.color.remind_blue;
+                color = 0;
                 break;
             case R.id.linear_red:
                 SelectColorDialog.selected_color = R.color.remind_red;
+                color = 1;
                 break;
             case R.id.linear_yellow:
                 SelectColorDialog.selected_color = R.color.remind_yellow;
+                color = 2;
                 break;
             case R.id.linear_green:
                 SelectColorDialog.selected_color = R.color.remind_green;
+                color = 3;
                 break;
             case R.id.linear_cyan:
                 SelectColorDialog.selected_color = R.color.remind_cyan;
+                color = 4;
                 break;
             case R.id.linear_magenta:
                 SelectColorDialog.selected_color = R.color.remind_magenta;
+                color = 5;
                 break;
             case R.id.linear_orange:
                 SelectColorDialog.selected_color = R.color.remind_orange;
+                color = 6;
                 break;
             case R.id.linear_purple:
                 SelectColorDialog.selected_color = R.color.remind_purple;
+                color = 7;
                 break;
         }
-        color = SelectColorDialog.selected_color;
         v.setBackground(ContextCompat.getDrawable(this, R.drawable.border_color_highlight));
         lscl = (LinearLayout) v;
         // SelectColorDialog.colorDl.cancel();

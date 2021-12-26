@@ -30,7 +30,14 @@
     <string name="save">儲存</string>
     <string name="hour">點</string>
     <string name="minute">分</string>
+    <string name="expired">過期</string>
     <string-array name="spinner">
+        <item>工作</item>
+        <item>活動</item>
+        <item>提醒</item>
+    </string-array>
+    <string-array name= "typeAndAll_array">
+        <item>全部</item>>
         <item>工作</item>
         <item>活動</item>
         <item>提醒</item>

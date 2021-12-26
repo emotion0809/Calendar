@@ -269,7 +269,7 @@ public class SelectTimeDialog extends DialogFragment {
                                     } else {
                                         e_minute = Integer.parseInt(etminute.getText().toString());
                                     }
-                                    if (NewRemindActivity.isAllDay.matches("Y")) {
+                                    if (NewRemindActivity.isAllDay.matches("N")) {
                                         selected_hm = "";
                                     } else {
                                         selected_hm = NewRemindActivity.timeFormatter(e_hour, e_minute);

@@ -45,6 +45,7 @@ public class CalendarFragment extends Fragment {
     private static SqlDataBaseHelper sqlDataBaseHelper;
     //
     public static LinearLayout[] layout_date = new LinearLayout[31];
+    public static int[] colorBaground = {R.drawable.remind_blue,R.drawable.remind_red};
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -135,19 +136,22 @@ public class CalendarFragment extends Fragment {
             }
         }
         //提醒
-        joinRemind();
-    }
-
-    public static void joinRemind() {
         sqlDataBaseHelper = new SqlDataBaseHelper(froot.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
         db = sqlDataBaseHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s Where startYear = %d AND startMonth = %d ORDER BY startDate", DataBaseTable, year, startmonth), null);
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
-            TextView text_remind = new TextView(froot.getContext());
+            TextView text_remind = new TextView(root.getContext());
+            text_remind.setBackground(ContextCompat.getDrawable(root.getContext(), colorBaground[cursor.getInt(3)]));
             text_remind.setText(cursor.getString(1));
+            GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+            param.setMargins(10,10,10,10);
+            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            text_remind.setLayoutParams(param);
             CalendarFragment.layout_date[cursor.getInt(7) - 1].addView(text_remind);
             cursor.moveToNext();
         }
     }
+
 }
