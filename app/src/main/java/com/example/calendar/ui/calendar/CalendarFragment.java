@@ -146,7 +146,8 @@ public class CalendarFragment extends Fragment {
         for (int i = 0; i < cursor.getCount(); i++) {
             TextView text_remind = new TextView(froot.getContext());
             text_remind.setText(cursor.getString(1));
-            CalendarFragment.layout_date[cursor.getInt(7)].addView(text_remind);
+            CalendarFragment.layout_date[cursor.getInt(7) - 1].addView(text_remind);
+            cursor.moveToNext();
         }
     }
 }

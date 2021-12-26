@@ -69,6 +69,25 @@ public class NewRemindActivity extends AppCompatActivity {
         //新增返回建
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        //初始化時間設定!!!!!!!!!!!!!!!!! ----這個程式碼由Dvlpsk_feqma提供
+        CalendarFragment.setDate();
+        SelectTimeDialog.s_date = CalendarFragment.ymd[2];
+        SelectTimeDialog.s_month = CalendarFragment.ymd[1];
+        SelectTimeDialog.s_year = CalendarFragment.ymd[0];
+        SelectTimeDialog.e_date = CalendarFragment.ymd[2];
+        SelectTimeDialog.e_month = CalendarFragment.ymd[1];
+        SelectTimeDialog.e_year = CalendarFragment.ymd[0];
+        SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
+        SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
+        SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
+        SelectTimeDialog.e_minute = CalendarFragment.ymd[4];
+        if (SelectTimeDialog.s_minute + 30 > 59) {
+            SelectTimeDialog.e_minute -= 30;
+            SelectTimeDialog.e_hour++;
+        } else {
+            SelectTimeDialog.e_minute += 30;
+            //SelectTimeDialog.e_hour = SelectTimeDialog.s_hour;
+        }
         //switch建觸發(AllDay)
         Switch switch_allDay = (Switch) findViewById(R.id.switch_allDay);
         switch_allDay.setChecked(true);
@@ -86,14 +105,13 @@ public class NewRemindActivity extends AppCompatActivity {
                     Button button_startTime = (Button) findViewById(R.id.button_startTime);
                     Button button_endTime = (Button) findViewById(R.id.button_endTime);
                     button_startTime.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
-                    button_endTime.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
+                    button_endTime.setText(SelectTimeDialog.selected_time + timeFormatter(SelectTimeDialog.e_hour, SelectTimeDialog.e_minute));
+                    //////////////尚未製作跨日轉換
+
                 }
             }
         });
-        CalendarFragment.setDate();
-        SelectTimeDialog.s_date = CalendarFragment.ymd[2];
-        SelectTimeDialog.s_month = CalendarFragment.ymd[1];
-        SelectTimeDialog.s_year = CalendarFragment.ymd[0];
+
         try {
             Spinner sp = this.findViewById(R.id.spinner_type);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner, android.R.layout.simple_spinner_item);
@@ -117,7 +135,7 @@ public class NewRemindActivity extends AppCompatActivity {
                     SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
                     SelectTimeDialog.selected_time = String.format("%s", CalendarFragment.ymd[0]) + "年" + String.format("%s", CalendarFragment.ymd[1]) + "月" + String.format("%s", CalendarFragment.ymd[2]) + "日      ";
                     SelectTimeDialog.selected_hm = timeFormatter(CalendarFragment.ymd[3], CalendarFragment.ymd[4]);
-                    if (isAllDay.matches("Y") ) {
+                    if (isAllDay.matches("Y")) {
                         Sbtn.setText(SelectTimeDialog.selected_time);
                     } else {
                         Sbtn.setText(SelectTimeDialog.selected_time + SelectTimeDialog.selected_hm);
@@ -138,7 +156,7 @@ public class NewRemindActivity extends AppCompatActivity {
                             btn.setClickable(true);
                             btn.setVisibility(View.VISIBLE);
                             CalendarFragment.setDate();
-                            if (isAllDay.matches("Y") ) {
+                            if (isAllDay.matches("Y")) {
                                 btn.setText(SelectTimeDialog.selected_time);
                             } else {
                                 if (CalendarFragment.ymd[4] + 30 >= 60) {
@@ -300,7 +318,7 @@ public class NewRemindActivity extends AppCompatActivity {
         Time[1][2] = SelectTimeDialog.e_date;
         Time[1][3] = SelectTimeDialog.e_hour;
         Time[1][4] = SelectTimeDialog.e_minute;
-        if (! title.matches("")) {
+        if (!title.matches("")) {
             //insert
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", title);
@@ -323,7 +341,7 @@ public class NewRemindActivity extends AppCompatActivity {
             intent.setClass(NewRemindActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(this,"標題不能空白",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "標題不能空白", Toast.LENGTH_SHORT).show();
         }
     }
 

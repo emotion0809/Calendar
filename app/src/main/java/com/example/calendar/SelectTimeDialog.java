@@ -4,6 +4,7 @@ package com.example.calendar;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
@@ -46,11 +48,12 @@ public class SelectTimeDialog extends DialogFragment {
     public static int e_year = CalendarFragment.ymd[0];
     public static int e_month = CalendarFragment.ymd[1];
     public static int e_date = CalendarFragment.ymd[2];
-    public static int e_minute = CalendarFragment.ymd[3] + 30;
-    public static int e_hour = CalendarFragment.ymd[4];
+    public static int e_minute;
+    public static int e_hour;
 
     public boolean isStart;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -71,6 +74,9 @@ public class SelectTimeDialog extends DialogFragment {
         if (isStart) {
             ed_hour.setText(String.format("%s", s_hour));
             ed_min.setText(String.format("%s", s_minute));
+        } else {
+            ed_hour.setText(String.format("%s", e_hour));
+            ed_min.setText(String.format("%s", e_minute));
         }
         //日期選擇
         try {
@@ -84,6 +90,7 @@ public class SelectTimeDialog extends DialogFragment {
             if (isStart) {
                 smtitle.setText(String.format("%s", s_year) + "年" + String.format("%s", s_month) + "月");
             } else {
+                smtitle.setText(String.format("%s", e_year) + "年" + String.format("%s", e_month) + "月");
             }
 
             for (int r = 0; r < row; r++) {
@@ -112,7 +119,12 @@ public class SelectTimeDialog extends DialogFragment {
                                 v.setBackgroundColor(Color.parseColor("#222222"));
                                 v.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
                                 selected_time = String.format("%s", year) + "年" + String.format("%s", month) + "月" + oImageView.getText() + "日      ";
-                                s_date = Integer.parseInt(oImageView.getText().toString());
+                                if (isStart) {
+                                    s_date = Integer.parseInt(oImageView.getText().toString());
+                                } else {
+                                    e_date = Integer.parseInt(oImageView.getText().toString());
+                                }
+
                             }
                         });
                         ///////////////////////
@@ -139,10 +151,11 @@ public class SelectTimeDialog extends DialogFragment {
                         oImageView.setLayoutParams(param);
 
 ///////////////
-                        //Toast.makeText(getContext(), String.format("%s", oImageView.getText().toString() == String.format("%s", s_date)), Toast.LENGTH_SHORT).show();
+                        //給預設日期標記 --DVLPSK
                         if (oImageView.getText().toString().equals(String.format("%s", s_date)) && isStart) {
                             oImageView.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
-                        } else if (oImageView.getText().toString() == String.format("%s", e_date)) {
+                        } else if (oImageView.getText().toString().equals(String.format("%s", e_date)) && !isStart) {
+                            oImageView.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.dialog_highlight));
                         }
 
                         gridLayout.addView(oImageView);
@@ -175,7 +188,7 @@ public class SelectTimeDialog extends DialogFragment {
                     }
                 }
             });
-            if (NewRemindActivity.isAllDay.matches("Y") ) {
+            if (NewRemindActivity.isAllDay.matches("Y")) {
                 LinearLayout layout_time = (LinearLayout) root.findViewById(R.id.layout_time);
                 layout_time.setVisibility(View.INVISIBLE);
             } else {
@@ -187,42 +200,82 @@ public class SelectTimeDialog extends DialogFragment {
                     .setPositiveButton(R.string.define, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            // sign in the user ...
-                            if (isStart) {
-                                s_year = year;
-                                s_month = month;
-                                if (Integer.parseInt(etgohome.getText().toString()) > 23 || Integer.parseInt(etgohome.getText().toString()) < 0) {
-                                    Toast.makeText(getContext(), "Fuck!You've insert invalid hour,BAKA!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    s_hour = Integer.parseInt(etgohome.getText().toString());
+                            //日期檢定
+                            boolean startEndCheckPass = false;
+                            if (e_year == s_year) {
+                                if (e_month == s_month) {
+                                    if (e_date == s_date) {
+                                        if (e_hour == s_hour) {
+                                            if (e_minute > s_minute) {
+                                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                                startEndCheckPass = true;
+                                            } else if (e_minute < s_minute){
+                                                Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
+                                            }
+                                        } else if (e_hour > s_hour) {
+                                            ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                            startEndCheckPass = true;
+                                        } else if (e_hour < s_hour){
+                                            Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else if (e_date > s_date) {
+                                        ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                        startEndCheckPass = true;
+                                    } else if (e_date < s_date){
+                                        Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
+                                    }
+                                } else if (e_month > s_month) {
+                                    ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                    startEndCheckPass = true;
+                                } else if (e_month < s_month) {
+                                    Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                                 }
-                                if (Integer.parseInt(etminute.getText().toString()) > 59 || Integer.parseInt(etminute.getText().toString()) < 0) {
-                                    Toast.makeText(getContext(), "Fuck!You've insert invalid minute,BAKA!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    s_minute = Integer.parseInt(etminute.getText().toString());
-                                }
-
-                            }else{
-                                e_year = year;
-                                e_month = month;
-                                if (Integer.parseInt(etgohome.getText().toString()) > 23 || Integer.parseInt(etgohome.getText().toString()) < 0) {
-                                    Toast.makeText(getContext(), "Fuck!You've insert invalid hour,BAKA!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    e_hour = Integer.parseInt(etgohome.getText().toString());
-                                }
-                                if (Integer.parseInt(etminute.getText().toString()) > 59 || Integer.parseInt(etminute.getText().toString()) < 0) {
-                                    Toast.makeText(getContext(), "Fuck!You've insert invalid minute,BAKA!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    e_minute = Integer.parseInt(etminute.getText().toString());
-                                }
-                            }
-                            if (NewRemindActivity.isAllDay.matches("Y")) {
-                                selected_hm = "";
+                            } else if (e_year > s_year) {
+                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                startEndCheckPass = true;
                             } else {
-                                selected_hm = NewRemindActivity.timeFormatter(s_hour, s_minute);
+                                Toast.makeText(getContext(), "Start time can't be later.", Toast.LENGTH_LONG).show();
                             }
-
-                            ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                            // sign in the user ...
+                            if (startEndCheckPass) {
+                                if (isStart) {
+                                    s_year = year;
+                                    s_month = month;
+                                    if (Integer.parseInt(etgohome.getText().toString()) > 23 || Integer.parseInt(etgohome.getText().toString()) < 0) {
+                                        Toast.makeText(getContext(), "Fuck!You've insert invalid hour,BAKA!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        s_hour = Integer.parseInt(etgohome.getText().toString());
+                                    }
+                                    if (Integer.parseInt(etminute.getText().toString()) > 59 || Integer.parseInt(etminute.getText().toString()) < 0) {
+                                        Toast.makeText(getContext(), "Fuck!You've insert invalid minute,BAKA!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        s_minute = Integer.parseInt(etminute.getText().toString());
+                                    }
+                                    if (NewRemindActivity.isAllDay.matches("Y")) {
+                                        selected_hm = "";
+                                    } else {
+                                        selected_hm = NewRemindActivity.timeFormatter(s_hour, s_minute);
+                                    }
+                                } else {
+                                    e_year = year;
+                                    e_month = month;
+                                    if (Integer.parseInt(etgohome.getText().toString()) > 23 || Integer.parseInt(etgohome.getText().toString()) < 0) {
+                                        Toast.makeText(getContext(), "Fuck!You've insert invalid hour,BAKA!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        e_hour = Integer.parseInt(etgohome.getText().toString());
+                                    }
+                                    if (Integer.parseInt(etminute.getText().toString()) > 59 || Integer.parseInt(etminute.getText().toString()) < 0) {
+                                        Toast.makeText(getContext(), "Fuck!You've insert invalid minute,BAKA!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        e_minute = Integer.parseInt(etminute.getText().toString());
+                                    }
+                                    if (NewRemindActivity.isAllDay.matches("Y")) {
+                                        selected_hm = "";
+                                    } else {
+                                        selected_hm = NewRemindActivity.timeFormatter(e_hour, e_minute);
+                                    }
+                                }
+                            }
 
 
                         }
