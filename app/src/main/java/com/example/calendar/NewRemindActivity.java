@@ -57,7 +57,14 @@ public class NewRemindActivity extends AppCompatActivity {
     public static View last_click;
     public static LinearLayout lscl;
 
-    public static int[] ui_circle = {R.color.remind_blue, R.color.remind_red};
+    public static int[] ui_circle = {R.color.remind_blue,
+            R.color.remind_red,
+            R.color.remind_green,
+            R.color.remind_yellow,
+            R.color.remind_magenta,
+            R.color.remind_cyan,
+            R.color.remind_purple,
+            R.color.remind_orange};
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,13 +140,6 @@ public class NewRemindActivity extends AppCompatActivity {
                 }
                 cursor.moveToNext();
             }
-
-            /*SelectTimeDialog.e_date = CalendarFragment.ymd[2];
-            SelectTimeDialog.e_month = CalendarFragment.ymd[1];
-            SelectTimeDialog.e_year = CalendarFragment.ymd[0];
-
-            SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
-            SelectTimeDialog.e_minute = CalendarFragment.ymd[4];*/
         } else {
             actionBar.setTitle("新增記事");
             //使用預設資料(新增記事)
@@ -287,28 +287,28 @@ public class NewRemindActivity extends AppCompatActivity {
                 SelectColorDialog.selected_color = R.color.remind_red;
                 color = 1;
                 break;
-            case R.id.linear_yellow:
-                SelectColorDialog.selected_color = R.color.remind_yellow;
-                color = 2;
-                break;
             case R.id.linear_green:
                 SelectColorDialog.selected_color = R.color.remind_green;
-                color = 3;
+                color = 2;
                 break;
-            case R.id.linear_cyan:
-                SelectColorDialog.selected_color = R.color.remind_cyan;
-                color = 4;
+            case R.id.linear_yellow:
+                SelectColorDialog.selected_color = R.color.remind_yellow;
+                color = 3;
                 break;
             case R.id.linear_magenta:
                 SelectColorDialog.selected_color = R.color.remind_magenta;
-                color = 5;
+                color = 4;
                 break;
-            case R.id.linear_orange:
-                SelectColorDialog.selected_color = R.color.remind_orange;
-                color = 6;
+            case R.id.linear_cyan:
+                SelectColorDialog.selected_color = R.color.remind_cyan;
+                color = 5;
                 break;
             case R.id.linear_purple:
                 SelectColorDialog.selected_color = R.color.remind_purple;
+                color = 6;
+                break;
+            case R.id.linear_orange:
+                SelectColorDialog.selected_color = R.color.remind_orange;
                 color = 7;
                 break;
         }

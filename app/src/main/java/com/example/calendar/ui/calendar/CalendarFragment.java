@@ -61,7 +61,16 @@ public class CalendarFragment extends Fragment {
     private static SqlDataBaseHelper sqlDataBaseHelper;
     //
     public static LinearLayout[] layout_date = new LinearLayout[31];
-    public static int[] colorBackground = {R.drawable.remind_blue, R.drawable.remind_red};
+    public static int[] colorBackground = {
+            R.drawable.remind_blue,
+            R.drawable.remind_red,
+            R.drawable.remind_green,
+            R.drawable.remind_yellow,
+            R.drawable.remind_magenta,
+            R.drawable.remind_cyan,
+            R.drawable.remind_purple,
+            R.drawable.remind_orange
+    };
 
     MainActivity ma = new MainActivity();
 
