@@ -61,7 +61,7 @@ public class CalendarFragment extends Fragment {
     private static SqlDataBaseHelper sqlDataBaseHelper;
     //
     public static LinearLayout[] layout_date = new LinearLayout[31];
-    public static int[] colorBaground = {R.drawable.remind_blue, R.drawable.remind_red};
+    public static int[] colorBackground = {R.drawable.remind_blue, R.drawable.remind_red};
 
     MainActivity ma = new MainActivity();
 
@@ -177,7 +177,7 @@ public class CalendarFragment extends Fragment {
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             TextView text_remind = new TextView(root.getContext());
-            text_remind.setBackground(ContextCompat.getDrawable(root.getContext(), colorBaground[cursor.getInt(3)]));
+            text_remind.setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[cursor.getInt(3)]));
             text_remind.setText(cursor.getString(1));
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
             param.setMargins(0, 10, 0, 10);

@@ -36,7 +36,11 @@ public class CalendarConfirgureDialog extends DialogFragment {
     private static SQLiteDatabase db;
     private static SqlDataBaseHelper sqlDataBaseHelper;
     public static boolean moding_Database = false;
+<<<<<<< HEAD
     public static int id_modifier;
+=======
+    public static String name_modifier;
+>>>>>>> ece6eea6d3e3bfe0f7e3d5429c208037c29c3839
     public static int[] colorBackground = {R.drawable.remind_blue, R.drawable.remind_red};
 
     @Override
@@ -66,6 +70,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
                 param.setMargins(150, 20, 150, 20);
                 layout1.setLayoutParams(param);
                 //title
+<<<<<<< HEAD
                 TextView text_title = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTitle));
                 text_title.setText(cursor.getString(1));
                 text_title.setWidth(550);
@@ -80,6 +85,20 @@ public class CalendarConfirgureDialog extends DialogFragment {
                 }
                 text_title.setOnClickListener(v -> {
                     id_modifier = text_title.getId();
+=======
+                TextView text_title = new TextView(new ContextThemeWrapper(root.getContext(),R.style.CalendarConfigureTitle));
+                text_title.setText(cursor.getString(1));
+                text_title.setWidth(550);
+                //Time
+                TextView text_time = new TextView(new ContextThemeWrapper(root.getContext(),R.style.CalendarConfigureTime));
+                if(cursor.getString(4).matches("Y")){
+                    text_time.setText("全天");
+                }else{
+                    text_time.setText(String.format("%2d:%2d",cursor.getInt(8),cursor.getInt(9)));
+                }
+                text_title.setOnClickListener(v -> {
+                    name_modifier = text_title.getText().toString();
+>>>>>>> ece6eea6d3e3bfe0f7e3d5429c208037c29c3839
                     moding_Database = true;
                     Intent intent = new Intent();
                     intent.setClass(root.getContext(), NewRemindActivity.class);

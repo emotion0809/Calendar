@@ -24,12 +24,9 @@ public class SelectColorDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         try {
-            //colorDl = this.getDialog();
             View root = getLayoutInflater().inflate(R.layout.dialog_select_color, null);
             ImageView iv = getActivity().findViewById(R.id.image_color);
-
             builder.setView(root)
-                    // Add action buttons
                     .setPositiveButton(R.string.define, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {

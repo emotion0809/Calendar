@@ -23,12 +23,15 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/ic_palette.xml" value="0.13518518518518519" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/ic_work.xml" value="0.11944444444444445" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/red.xml" value="0.1361111111111111" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/remind_blue.xml" value="0.13240740740740742" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/drawable/remind_red.xml" value="0.13240740740740742" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/activity_new_remind.xml" value="0.16" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/app_bar_main.xml" value="0.1421875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/border.xml" value="0.2324074074074074" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/broder.xml" value="0.2324074074074074" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/content_main.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/diallog_select_time.xml" value="0.2574074074074074" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_cal_config.xml" value="0.1421875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_new_remind.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_color.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Calendar/app/src/main/res/layout/dialog_select_time.xml" value="0.22" />
