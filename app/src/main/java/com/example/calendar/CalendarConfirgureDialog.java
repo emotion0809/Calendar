@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,8 @@ public class CalendarConfirgureDialog extends DialogFragment {
     private static SQLiteDatabase db;
     private static SqlDataBaseHelper sqlDataBaseHelper;
     public static boolean moding_Database = false;
-    public static String name_modifier;
+    public static int id_modifier;
+    public static int[] colorBackground = {R.drawable.remind_blue, R.drawable.remind_red};
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -54,30 +56,38 @@ public class CalendarConfirgureDialog extends DialogFragment {
             cursor.moveToFirst();
             for (int i = 0; i < cursor.getCount(); i++) {
                 LinearLayout layout_list = (LinearLayout) root.findViewById(R.id.linear_config);
-                //第一層Layout設置
+                //第一層Layout
                 LinearLayout layout1 = new LinearLayout(root.getContext());
-                layout1.setOrientation(LinearLayout.VERTICAL);
-                layout1.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.remind_blue));
+                layout1.setOrientation(LinearLayout.HORIZONTAL);
+                layout1.setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[cursor.getInt(3)]));
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                 param.width = GridLayout.LayoutParams.MATCH_PARENT;
-                param.setMargins(10, 10, 10, 10);
+                param.setMargins(150, 20, 150, 20);
                 layout1.setLayoutParams(param);
-                //標題
-                TextView text_title = new TextView(root.getContext());
-                // if (cursor.getInt(7) - 1 == CalendarFragment.modify_index) {
+                //title
+                TextView text_title = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTitle));
                 text_title.setText(cursor.getString(1));
-                text_title.setGravity(Gravity.CENTER);
-                //}
+                text_title.setWidth(550);
+                text_title.setId(cursor.getInt(0));
+                //Time
+                TextView text_time = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTime));
 
-                layout1.addView(text_title);
-                layout1.setOnClickListener(v -> {
-                    name_modifier = text_title.getText().toString();
+                if (cursor.getString(4).matches("Y")) {
+                    text_time.setText("全天");
+                } else {
+                    text_time.setText(String.format("%2d:%2d", cursor.getInt(8), cursor.getInt(9)));
+                }
+                text_title.setOnClickListener(v -> {
+                    id_modifier = text_title.getId();
                     moding_Database = true;
                     Intent intent = new Intent();
                     intent.setClass(root.getContext(), NewRemindActivity.class);
                     startActivity(intent);
                 });
+                //addView
+                layout1.addView(text_title);
+                layout1.addView(text_time);
                 layout_list.addView(layout1);
                 cursor.moveToNext();
             }

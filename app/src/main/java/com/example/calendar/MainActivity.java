@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.calendar.databinding.ActivityMainBinding;
 import com.example.calendar.ui.calendar.CalendarFragment;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        Toast.makeText(this, "BACKING", Toast.LENGTH_SHORT).show();
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return 28;
         }
-
     }
 
     public void openDDC() {
