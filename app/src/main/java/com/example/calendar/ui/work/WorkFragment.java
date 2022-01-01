@@ -18,7 +18,7 @@ import androidx.gridlayout.widget.GridLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.calendar.R;
-import com.example.calendar.SqlDataBaseHelper;
+import com.example.calendar.DataBase;
 import com.example.calendar.databinding.FragmentWorkBinding;
 
 public class WorkFragment extends Fragment {
@@ -30,7 +30,7 @@ public class WorkFragment extends Fragment {
     private static final int DataBaseVersion = 1;
     private static final String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
-    private static SqlDataBaseHelper sqlDataBaseHelper;
+    private static DataBase sqlDataBaseHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class WorkFragment extends Fragment {
 
     public static void init(View root){
         try {
-            sqlDataBaseHelper = new SqlDataBaseHelper(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
+            sqlDataBaseHelper = new DataBase(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
             db = sqlDataBaseHelper.getWritableDatabase();
             Cursor cursor = db.rawQuery(String.format(
                     "SELECT * FROM %s " +

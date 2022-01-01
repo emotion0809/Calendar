@@ -1,66 +1,41 @@
 package com.example.calendar.ui.calendar;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.gridlayout.widget.GridLayout;
 
-import com.example.calendar.CalendarConfirgureDialog;
 import com.example.calendar.MainActivity;
-import com.example.calendar.NewRemindActivity;
 import com.example.calendar.R;
-import com.example.calendar.Remind;
-import com.example.calendar.SelectColorDialog;
-import com.example.calendar.SqlDataBaseHelper;
+import com.example.calendar.DataBase;
 import com.example.calendar.databinding.FragmentCalendarBinding;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.zip.Inflater;
 
 public class CalendarFragment extends Fragment {
 
+    //建構Fragment
     private static LayoutInflater inflater;
     private FragmentCalendarBinding binding;
-    public static int yearsTillLeapYear;
-    public static int startdate = 4;
-    public static int startmonth = 12;
-    public static int year = 2021;
-    public static int[] month_days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    public static View froot;
-    public static int[] ymd = {0, 0, 0, 0, 0};
-    public static int modify_index;
+    //UI紀錄
+    public static LinearLayout[] ll_date = new LinearLayout[42];
+    public static TextView[] tv_date = new TextView[42];
+    public static TextView[][] tv_note = new TextView[42][4];
     //DataBase
-    private static final String DataBaseName = "Calendar";
-    private static final int DataBaseVersion = 1;
-    private static final String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
-    private static SqlDataBaseHelper sqlDataBaseHelper;
-    //
-    public static LinearLayout[] layout_date = new LinearLayout[31];
+    private static DataBase dataBase;
+    //記事背景顏色
     public static int[] colorBackground = {
             R.drawable.remind_blue,
             R.drawable.remind_red,
@@ -71,33 +46,29 @@ public class CalendarFragment extends Fragment {
             R.drawable.remind_purple,
             R.drawable.remind_orange
     };
+    public static int startday = 6;
+    public static int calendarDate[] = new int[3];
+    public static int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    public static View rootCalendar;
 
     MainActivity ma = new MainActivity();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        //建構Fragment
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        froot = root;
+        rootCalendar = root;
+        //開啟資料庫
+        dataBase = new DataBase(root.getContext(), "Calendar", null, 1, "Note");
+        db = dataBase.getWritableDatabase();
+        //取得日期
+        MainActivity.getDate();
+        calendarDate[0] = MainActivity.dateTime[0];
+        calendarDate[1] = MainActivity.dateTime[1];
+        calendarDate[2] = MainActivity.dateTime[2];
         init(root);
-
-        sqlDataBaseHelper = new SqlDataBaseHelper(froot.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
-        db = sqlDataBaseHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s Where startYear = %d AND startMonth = %d ORDER BY startDate", DataBaseTable, year, startmonth), null);
-        cursor.moveToFirst();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            CalendarFragment.layout_date[cursor.getInt(7) - 1].setOnClickListener(
-                    v -> {
-                        //點擊按鈕
-                        //modify_index = cursor.getInt(7) - 1;
-                        DialogFragment df = new CalendarConfirgureDialog();
-                        df.show(getFragmentManager(), "");
-
-                    }
-            );
-            cursor.moveToNext();
-        }
         return root;
     }
 
@@ -108,100 +79,102 @@ public class CalendarFragment extends Fragment {
         binding = null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void setDate() {
-        LocalDateTime curTime = LocalDateTime.now();
-        DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy", Locale.TAIWAN);
-        ymd[0] = Integer.parseInt(formmat1.format(curTime));
-        formmat1 = DateTimeFormatter.ofPattern("MM", Locale.TAIWAN);
-        ymd[1] = Integer.parseInt(formmat1.format(curTime));
-        formmat1 = DateTimeFormatter.ofPattern("dd", Locale.TAIWAN);
-        ymd[2] = Integer.parseInt(formmat1.format(curTime));
-        formmat1 = DateTimeFormatter.ofPattern("HH", Locale.TAIWAN);
-        ymd[3] = Integer.parseInt(formmat1.format(curTime));
-        formmat1 = DateTimeFormatter.ofPattern("mm", Locale.TAIWAN);
-        ymd[4] = Integer.parseInt(formmat1.format(curTime));
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void init(View root) {
-        setDate();
-        String[] weekdate = {"日", "一", "二", "三", "四", "五", "六"};
-        //年份和月份
-        TextView text_month = root.findViewById(R.id.text_month);
-        text_month.setTextSize(20);
-        text_month.setText(String.format("%d年 %d月", year, startmonth));
         final int column = 7;
         final int row = 7;
-        GridLayout gridLayout = (GridLayout) root.findViewById(R.id.calendar_grid);
-        gridLayout.removeAllViews();
-        gridLayout.setColumnCount(column);
-        gridLayout.setRowCount(row);
+        final String[] weekdate = {"日", "一", "二", "三", "四", "五", "六"};
+        //年份和月份
+        TextView text_month = root.findViewById(R.id.tv_month);
+        text_month.setTextSize(20);
+        text_month.setText(String.format("%d年 %d月", calendarDate[0], calendarDate[1]));
+
+        GridLayout gl_calendar = (GridLayout) root.findViewById(R.id.gl_calendar);
+        gl_calendar.removeAllViews();
+        gl_calendar.setColumnCount(column);
+        gl_calendar.setRowCount(row);
         //星期
         for (int c = 0, r = 0; c < column; c++) {
-            TextView text_week = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendar));
-            text_week.setText(weekdate[c]);
+            TextView tv_week = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendar));
+            tv_week.setText(weekdate[c]);
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
             param.height = GridLayout.LayoutParams.WRAP_CONTENT;
             param.width = GridLayout.LayoutParams.WRAP_CONTENT;
             param.columnSpec = GridLayout.spec(c, 1f);
             param.rowSpec = GridLayout.spec(r);
-            text_week.setLayoutParams(param);
-            gridLayout.addView(text_week);
+            tv_week.setLayoutParams(param);
+            gl_calendar.addView(tv_week);
         }
         //日期
-        int printdate = 1;
         for (int r = 1; r < row; r++) {
             for (int c = 0; c < column; c++) {
-                LinearLayout layout_date = new LinearLayout(root.getContext());
-                layout_date.setOrientation(LinearLayout.VERTICAL);
-                TextView text_date = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
-                if (r == 1 && c >= startdate - 1 || r > 1 && printdate <= month_days[startmonth - 1]) {
-                    text_date.setText(String.format("%d", printdate));
-                    CalendarFragment.layout_date[printdate - 1] = layout_date;
-                    printdate++;
-                } else {
-                    text_date.setText("");
-                }
-                layout_date.addView(text_date);
-                //標記當天
-                if (ymd[0] == year && ymd[1] == startmonth && ymd[2] == printdate - 1) {
-                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border_today));
-                } else {
-                    layout_date.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border));
-                }
+                //格子的編號
+                int n = (r - 1) * column + c;
+                //將ll_date加入gl_calendar
+                ll_date[n] = new LinearLayout(root.getContext());
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                 param.width = GridLayout.LayoutParams.WRAP_CONTENT;
                 param.columnSpec = GridLayout.spec(c, 1f);
                 param.rowSpec = GridLayout.spec(r, 1f);
-                layout_date.setLayoutParams(param);
-                gridLayout.addView(layout_date);
+                ll_date[n].setOrientation(LinearLayout.VERTICAL);
+                ll_date[(r - 1) * column + c].setLayoutParams(param);
+                ll_date[n].setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border));
+                gl_calendar.addView(ll_date[n]);
+                //將tv_date加入ll_date
+                tv_date[n]
+                        = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarDate));
+                ll_date[n].addView(tv_date[n]);
+                //將tv_note加入llm_date
+                for (int i = 0; i < 3; i++) {
+                    tv_note[n][i]
+                            = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarNote));
+                    GridLayout.LayoutParams param2 = new GridLayout.LayoutParams();
+                    param2.setMargins(5, 5, 5, 5);
+                    param2.height = GridLayout.LayoutParams.WRAP_CONTENT;
+                    param2.width = GridLayout.LayoutParams.MATCH_PARENT;
+                    tv_note[n][i].setLayoutParams(param2);
+                    tv_note[n][i].setSingleLine(true);
+                    tv_note[n][i].setMaxEms(2);
+                    ll_date[n].addView(tv_note[n][i]);
+                }
             }
         }
-        //提醒
-        sqlDataBaseHelper = new SqlDataBaseHelper(froot.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
-        db = sqlDataBaseHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s Where startYear = %d AND startMonth = %d ORDER BY startDate", DataBaseTable, year, startmonth), null);
+        //放入日期
+        for (int d = 0; d < monthDays[calendarDate[1] - 1]; d++) {
+            tv_date[d + startday].setText(String.format("%d", d + 1));
+            //標記當天
+            if (MainActivity.dateTime[0] == calendarDate[0] && MainActivity.dateTime[1] == calendarDate[1] && MainActivity.dateTime[2] == d + 1) {
+                ll_date[d + startday]
+                        .setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.bg_today));
+            }
+        }
+        int[] n = new int[31];
+        for (int i = 0; i < n.length; i++) {
+            n[i] = 0;
+        }
+        String sql = String.format(
+                "SELECT title, color, startDate FROM Note " +
+                        "Where startYear = %d AND startMonth = %d " +
+                        "ORDER BY startDate",
+                calendarDate[0], calendarDate[1]
+        );
+        Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
-            TextView text_remind = new TextView(root.getContext());
-            text_remind.setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[cursor.getInt(3)]));
-            text_remind.setText(cursor.getString(1));
-            GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-            param.setMargins(0, 10, 0, 10);
-            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            param.width = GridLayout.LayoutParams.MATCH_PARENT;
-            text_remind.setLayoutParams(param);
-            text_remind.setSingleLine(true);
-            text_remind.setWidth(70);
-            text_remind.setGravity(Gravity.CENTER);
-            text_remind.setEllipsize(TextUtils.TruncateAt.END);
-            //text_remind.setMaxEms(5);
-            CalendarFragment.layout_date[cursor.getInt(7) - 1].addView(text_remind);
-
+            //取得資料
+            String title = cursor.getString(0);
+            int color = cursor.getInt(1);
+            int startDate = cursor.getInt(2);
+            if (n[startDate - 1] <= 3) {
+                tv_note[startDate + startday - 1][n[startDate - 1]].setText(title);
+                tv_note[startDate + startday - 1][n[startDate - 1]]
+                        .setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[color]));
+                n[startDate - 1]++;
+            }
             cursor.moveToNext();
         }
     }
-
 }

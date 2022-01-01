@@ -7,17 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class SqlDataBaseHelper extends SQLiteOpenHelper {
+public class DataBase extends SQLiteOpenHelper {
     private static final String DataBaseName = "Calendar";
     private static final int DataBaseVersion = 1;
 
-    public SqlDataBaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, String TableName) {
+    public DataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, String TableName) {
         super(context, DataBaseName, null, DataBaseVersion);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String SqlTable = "CREATE TABLE IF NOT EXISTS Remind (" +
+        String SqlTable = "CREATE TABLE IF NOT EXISTS Note (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title TEXT not null," +
                 "type TEXT not null," +
@@ -38,7 +38,7 @@ public class SqlDataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        final String SQL = "DROP TABLE Remind";
+        final String SQL = "DROP TABLE Note";
         sqLiteDatabase.execSQL(SQL);
     }
 

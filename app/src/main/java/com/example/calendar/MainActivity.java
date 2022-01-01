@@ -14,7 +14,6 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,31 +21,35 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    public static int dateTime[] = new int[5];
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarMain.toolbar);
+        //浮動按鈕
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, NewRemindActivity.class);
+                intent.setClass(MainActivity.this, EditNoteActivity.class);
                 startActivity(intent);
             }
         });
+        //Drawer
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_calendar, R.id.nav_work, R.id.nav_diary)
                 .setOpenableLayout(drawer)
@@ -55,10 +58,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         Stetho.initializeWithDefaults(this);
-
     }
 
-
+    //選單
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Drawer
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -75,43 +78,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void onClick_monthSel(View view) {
-        switch (view.getId()) {
-            case R.id.button_lAro:
-                if (CalendarFragment.startmonth != 1) {
-                    CalendarFragment.startmonth--;
-                } else {
-                    CalendarFragment.year--;
-                    CalendarFragment.month_days[1] = isLeapYear(CalendarFragment.year);
-                    CalendarFragment.startmonth = 12;
-                }
-                CalendarFragment.startdate -= CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
-                if (CalendarFragment.startdate < 1) {
-
-                    CalendarFragment.startdate += 7;
-                }
-                break;
-            case R.id.button_rAro:
-                CalendarFragment.startdate += CalendarFragment.month_days[CalendarFragment.startmonth - 1] % 7;
-                if (CalendarFragment.startdate > 7) {
-                    CalendarFragment.startdate -= 7;
-                }
-                if (CalendarFragment.startmonth != 12) {
-                    CalendarFragment.startmonth++;
-                    CalendarFragment.month_days[1] = isLeapYear(CalendarFragment.year);
-                } else {
-                    CalendarFragment.year++;
-                    CalendarFragment.startmonth = 1;
-                }
-                break;
-        }
-        try {
-            CalendarFragment.init(CalendarFragment.froot);
-        } catch (Exception eee) {
-            System.out.println(eee);
-        }
+    public static void getDate() {
+        LocalDateTime curTime = LocalDateTime.now();
+        DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy", Locale.TAIWAN);
+        dateTime[0] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("MM", Locale.TAIWAN);
+        dateTime[1] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("dd", Locale.TAIWAN);
+        dateTime[2] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("HH", Locale.TAIWAN);
+        dateTime[3] = Integer.parseInt(formmat1.format(curTime));
+        formmat1 = DateTimeFormatter.ofPattern("mm", Locale.TAIWAN);
+        dateTime[4] = Integer.parseInt(formmat1.format(curTime));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onClick_monthChange(View view) {
+        switch (view.getId()) {
+            case R.id.bt_leftArrow:
+                if (CalendarFragment.calendarDate[1] != 1) {
+                    CalendarFragment.calendarDate[1]--;
+                } else {
+                    CalendarFragment.calendarDate[0]--;
+                    CalendarFragment.monthDays[1] = isLeapYear(CalendarFragment.calendarDate[0]);
+                    CalendarFragment.calendarDate[1] = 12;
+                }
+                CalendarFragment.startday -= CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
+                if (CalendarFragment.startday < 1) {
+
+                    CalendarFragment.startday += 7;
+                }
+                break;
+            case R.id.bt_rightArrow:
+                CalendarFragment.startday += CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
+                if (CalendarFragment.startday > 7) {
+                    CalendarFragment.startday -= 7;
+                }
+                if (CalendarFragment.calendarDate[1] != 12) {
+                    CalendarFragment.calendarDate[1]++;
+                    CalendarFragment.monthDays[1] = isLeapYear(CalendarFragment.calendarDate[0]);
+                } else {
+                    CalendarFragment.calendarDate[0]++;
+                    CalendarFragment.calendarDate[1] = 1;
+                }
+                break;
+        }
+        CalendarFragment.init(CalendarFragment.rootCalendar);
+    }
 
     public static int isLeapYear(int year) {
         if (year % 4 == 0 && year % 100 != 0) {
@@ -121,8 +134,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openDDC() {
-        DialogFragment newFragment = new SelectColorDialog();
-        newFragment.show(getSupportFragmentManager(), "selectColor");
-    }
 }

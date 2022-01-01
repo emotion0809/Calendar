@@ -6,15 +6,10 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +21,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.example.calendar.ui.calendar.CalendarFragment;
-import com.google.android.material.internal.TextWatcherAdapter;
 
 public class SelectTimeDialog extends DialogFragment {
     String[] week = {"日", "一", "二", "三", "四", "五", "六"};
@@ -35,20 +29,20 @@ public class SelectTimeDialog extends DialogFragment {
     public static boolean notRequireCheck = true;
     public static int month;
     public static int year;
-    public static int startdate = CalendarFragment.startdate;
+    public static int startdate = CalendarFragment.startday;
     public static boolean isLeap;
     public static TextView[] dialogTVs = new TextView[42];
     public static View sroot;
     public static String selected_time;
     public static String selected_hm;
-    public static int s_year = CalendarFragment.ymd[0];
-    public static int s_month = CalendarFragment.ymd[1];
-    public static int s_date = CalendarFragment.ymd[2];
-    public static int s_minute = CalendarFragment.ymd[3];
-    public static int s_hour = CalendarFragment.ymd[4];
-    public static int e_year = CalendarFragment.ymd[0];
-    public static int e_month = CalendarFragment.ymd[1];
-    public static int e_date = CalendarFragment.ymd[2];
+    public static int s_year = MainActivity.dateTime[0];
+    public static int s_month = MainActivity.dateTime[1];
+    public static int s_date = MainActivity.dateTime[2];
+    public static int s_minute = MainActivity.dateTime[3];
+    public static int s_hour = MainActivity.dateTime[4];
+    public static int e_year = MainActivity.dateTime[0];
+    public static int e_month = MainActivity.dateTime[1];
+    public static int e_date = MainActivity.dateTime[2];
     public static int e_minute;
     public static int e_hour;
 
@@ -59,7 +53,7 @@ public class SelectTimeDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if (NewRemindActivity.last_click == getActivity().findViewById(R.id.button_startTime)) {
+        if (EditNoteActivity.last_click == getActivity().findViewById(R.id.button_startTime)) {
             isStart = true;
             month = s_month;
             year = s_year;
@@ -134,7 +128,7 @@ public class SelectTimeDialog extends DialogFragment {
                         if (r == 1 && c >= startdate - 1) {
                             oImageView.setText(String.format("%s", printdate));
                             printdate++;
-                        } else if (r > 1 && printdate <= CalendarFragment.month_days[CalendarFragment.startmonth - 1]) {
+                        } else if (r > 1 && printdate <= CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1]) {
                             oImageView.setText(String.format("%s", printdate));
                             printdate++;
                         } else {
@@ -189,7 +183,7 @@ public class SelectTimeDialog extends DialogFragment {
                     }
                 }
             });
-            if (NewRemindActivity.isAllDay.matches("Y")) {
+            if (EditNoteActivity.isAllDay.matches("Y")) {
                 LinearLayout layout_time = (LinearLayout) root.findViewById(R.id.layout_time);
                 layout_time.setVisibility(View.INVISIBLE);
             } else {
@@ -259,10 +253,10 @@ public class SelectTimeDialog extends DialogFragment {
                                     } else {
                                         s_minute = Integer.parseInt(etminute.getText().toString());
                                     }
-                                    if (NewRemindActivity.isAllDay.matches("Y")) {
+                                    if (EditNoteActivity.isAllDay.matches("Y")) {
                                         selected_hm = "";
                                     } else {
-                                        selected_hm = NewRemindActivity.timeFormatter(s_hour, s_minute);
+                                        selected_hm = EditNoteActivity.timeFormatter(s_hour, s_minute);
                                     }
                                 } else {
                                     e_year = year;
@@ -277,13 +271,13 @@ public class SelectTimeDialog extends DialogFragment {
                                     } else {
                                         e_minute = Integer.parseInt(etminute.getText().toString());
                                     }
-                                    if (NewRemindActivity.isAllDay.matches("Y")) {
+                                    if (EditNoteActivity.isAllDay.matches("Y")) {
                                         selected_hm = "";
                                     } else {
-                                        selected_hm = NewRemindActivity.timeFormatter(e_hour, e_minute);
+                                        selected_hm = EditNoteActivity.timeFormatter(e_hour, e_minute);
                                     }
                                 }
-                                ((TextView) NewRemindActivity.last_click).setText(selected_time + selected_hm);
+                                ((TextView) EditNoteActivity.last_click).setText(selected_time + selected_hm);
                             } else {
                                 if (isStart) {
                                     s_year = res_ym[0];
@@ -321,7 +315,7 @@ public class SelectTimeDialog extends DialogFragment {
                     if (r == 1 && c >= startdate - 1) {
                         dialogTVs[(r - 1) * 7 + c].setText(String.format("%s", printdate));
                         printdate++;
-                    } else if (r > 1 && printdate <= CalendarFragment.month_days[month - 1]) {
+                    } else if (r > 1 && printdate <= CalendarFragment.monthDays[month - 1]) {
                         dialogTVs[(r - 1) * 7 + c].setText(String.format("%s", printdate));
                         printdate++;
                     } else {

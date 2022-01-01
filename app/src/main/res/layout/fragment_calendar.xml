@@ -20,19 +20,19 @@
             android:background="@color/blue_1">
 
             <ImageButton
-                android:id="@+id/button_lAro"
+                android:id="@+id/bt_leftArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/time"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                android:onClick="onClick_monthSel"
+                android:onClick="onClick_monthChange"
                 app:srcCompat="@drawable/ic_back_arrow"
                 />
 
             <TextView
-                android:id="@+id/text_month"
+                android:id="@+id/tv_month"
                 style="@style/calendar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -40,14 +40,14 @@
                 android:text="12月" />
 
             <ImageButton
-                android:id="@+id/button_rAro"
+                android:id="@+id/bt_rightArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/action_settings"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                android:onClick="onClick_monthSel"
+                android:onClick="onClick_monthChange"
                 app:srcCompat="@drawable/ic_forward_arrow"
                  />
 
@@ -55,7 +55,7 @@
 
 
         <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/calendar_grid"
+            android:id="@+id/gl_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:columnCount="7"

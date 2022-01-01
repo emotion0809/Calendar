@@ -1,6 +1,5 @@
 package com.example.calendar;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -9,23 +8,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,22 +31,19 @@ import android.widget.Toast;
 import com.example.calendar.ui.calendar.CalendarFragment;
 import com.facebook.stetho.Stetho;
 
-import java.time.LocalDateTime;
-
-public class NewRemindActivity extends AppCompatActivity {
-
+public class EditNoteActivity extends AppCompatActivity {
     //DataBase
-    private static final String DataBaseName = "Calendar";
-    private static final int DataBaseVersion = 1;
-    private static final String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
-    private SqlDataBaseHelper sqlDataBaseHelper;
-    //Remind DataBase
+    private DataBase sqlDataBaseHelper;
+    //要放入資料庫的資料
     public static String title;
     public static String type;
     public static int color;
     public static String isAllDay = "Y";
     public static int Time[][] = new int[2][5];
+    //判斷為新增或更新
+    public static Boolean isUpdateNote = false;
+    public static int updateNoteId;
 
     public static View last_click;
     public static LinearLayout lscl;
@@ -66,6 +57,7 @@ public class NewRemindActivity extends AppCompatActivity {
             R.color.remind_purple,
             R.color.remind_orange};
 
+    //選單
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (CalendarConfirgureDialog.moding_Database) {
@@ -86,11 +78,9 @@ public class NewRemindActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("你確定要刪除這筆資料嗎?");
                 builder.setPositiveButton("確定", (dialog, id) -> {
-                    sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
-                    db = sqlDataBaseHelper.getWritableDatabase();
-                    db.delete(DataBaseTable, "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
+                    db.delete("Note", "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
                     Intent intent = new Intent();
-                    intent.setClass(NewRemindActivity.this, MainActivity.class);
+                    intent.setClass(EditNoteActivity.this, MainActivity.class);
                     startActivity(intent);
                 });
                 builder.setNegativeButton("取消", (dialogInterface, id) -> {
@@ -108,16 +98,29 @@ public class NewRemindActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_remind);
-
+        //開啟資料庫
+        sqlDataBaseHelper = new DataBase(this, "Calendar", null, 1, "Note");
+        db = sqlDataBaseHelper.getWritableDatabase();
         //新增返回建
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //初始化時間設定!!!!!!!!!!!!!!!!! ----這個程式碼由Dvlpsk_feqma提供 PLUS+++
-        CalendarFragment.setDate();
-        if (CalendarConfirgureDialog.moding_Database) {
+        //取得時間
+        MainActivity.getDate();
+        if (isUpdateNote) {
+
+        } else {
+            actionBar.setTitle("新增記事");
+            for (int i = 0; i <= Time.length; i++) {
+                for (int j = 0; i <= Time[i].length; i++) {
+                    Time[i][j] = MainActivity.dateTime[j];
+                }
+            }
+        }
+
+
+        /*if (CalendarConfirgureDialog.moding_Database) {
             //把資料庫的東西放這裡!!!
-            sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
-            db = sqlDataBaseHelper.getWritableDatabase();
+
             Cursor cursor = db.rawQuery(String.format(
                     "SELECT * FROM %s " +
                             "ORDER BY startYear,startMonth,startDate,startHour,startMinute ",
@@ -141,20 +144,20 @@ public class NewRemindActivity extends AppCompatActivity {
                 cursor.moveToNext();
             }
         } else {
-            actionBar.setTitle("新增記事");
-            //使用預設資料(新增記事)
-            SelectTimeDialog.s_date = CalendarFragment.ymd[2];
-            SelectTimeDialog.s_month = CalendarFragment.ymd[1];
-            SelectTimeDialog.s_year = CalendarFragment.ymd[0];
-            SelectTimeDialog.e_date = CalendarFragment.ymd[2];
-            SelectTimeDialog.e_month = CalendarFragment.ymd[1];
-            SelectTimeDialog.e_year = CalendarFragment.ymd[0];
-            SelectTimeDialog.s_hour = CalendarFragment.ymd[3];
-            SelectTimeDialog.s_minute = CalendarFragment.ymd[4];
-            SelectTimeDialog.e_hour = CalendarFragment.ymd[3];
-            SelectTimeDialog.e_minute = CalendarFragment.ymd[4];
 
-        }
+            //使用預設資料(新增記事)
+            SelectTimeDialog.s_date = MainActivity.dateTime[2];
+            SelectTimeDialog.s_month = MainActivity.dateTime[1];
+            SelectTimeDialog.s_year = MainActivity.dateTime[0];
+            SelectTimeDialog.e_date = MainActivity.dateTime[2];
+            SelectTimeDialog.e_month = MainActivity.dateTime[1];
+            SelectTimeDialog.e_year = MainActivity.dateTime[0];
+            SelectTimeDialog.s_hour = MainActivity.dateTime[3];
+            SelectTimeDialog.s_minute = MainActivity.dateTime[4];
+            SelectTimeDialog.e_hour = MainActivity.dateTime[3];
+            SelectTimeDialog.e_minute = MainActivity.dateTime[4];
+
+        }*/
         if (SelectTimeDialog.s_minute + 30 > 59) {
             SelectTimeDialog.e_minute -= 30;
             SelectTimeDialog.e_hour++;
@@ -198,7 +201,7 @@ public class NewRemindActivity extends AppCompatActivity {
                     Button btn = findViewById(R.id.button_endTime);
                     Button Sbtn = findViewById(R.id.button_startTime);
 
-                    CalendarFragment.setDate();
+                    MainActivity.getDate();
                     SelectTimeDialog.selected_time = String.format("%s", SelectTimeDialog.s_year) + "年" + String.format("%s", SelectTimeDialog.s_month) + "月" + String.format("%s", SelectTimeDialog.s_date) + "日      ";
                     SelectTimeDialog.selected_hm = timeFormatter(SelectTimeDialog.s_hour, SelectTimeDialog.s_minute);
                     if (isAllDay.matches("Y")) {
@@ -223,15 +226,15 @@ public class NewRemindActivity extends AppCompatActivity {
                             ta.setText("結束時間");
                             btn.setClickable(true);
                             btn.setVisibility(View.VISIBLE);
-                            CalendarFragment.setDate();
+                            MainActivity.getDate();
                             if (isAllDay.matches("Y")) {
                                 btn.setText(SelectTimeDialog.selected_time);
                             } else {
-                                if (CalendarFragment.ymd[4] + 30 >= 60) {
-                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(CalendarFragment.ymd[3] + 1, CalendarFragment.ymd[4] - 30));
+                                if (MainActivity.dateTime[4] + 30 >= 60) {
+                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(MainActivity.dateTime[3] + 1, MainActivity.dateTime[4] - 30));
                                     //////////////尚未製作跨日轉換
                                 } else {
-                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(CalendarFragment.ymd[3], CalendarFragment.ymd[4] + 30));
+                                    btn.setText(SelectTimeDialog.selected_time + timeFormatter(MainActivity.dateTime[3], MainActivity.dateTime[4] + 30));
                                 }
                             }
                             break;
@@ -330,7 +333,7 @@ public class NewRemindActivity extends AppCompatActivity {
                     if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
                         SelectTimeDialog.startdate -= 29 % 7;
                     } else {
-                        SelectTimeDialog.startdate -= CalendarFragment.month_days[SelectTimeDialog.month - 1] % 7;
+                        SelectTimeDialog.startdate -= CalendarFragment.monthDays[SelectTimeDialog.month - 1] % 7;
                     }
 
                     if (SelectTimeDialog.startdate < 1) {
@@ -342,7 +345,7 @@ public class NewRemindActivity extends AppCompatActivity {
                     if (MainActivity.isLeapYear(SelectTimeDialog.year) == 29 && SelectTimeDialog.month - 1 == 1) {
                         SelectTimeDialog.startdate += 29 % 7;
                     } else {
-                        SelectTimeDialog.startdate += CalendarFragment.month_days[SelectTimeDialog.month - 1] % 7;
+                        SelectTimeDialog.startdate += CalendarFragment.monthDays[SelectTimeDialog.month - 1] % 7;
                     }
 
                     if (SelectTimeDialog.startdate > 7) {
@@ -376,9 +379,6 @@ public class NewRemindActivity extends AppCompatActivity {
     }
 
     public void onClick_save(View view) {
-        //開啟資料庫
-        sqlDataBaseHelper = new SqlDataBaseHelper(this, DataBaseName, null, DataBaseVersion, DataBaseTable);
-        db = sqlDataBaseHelper.getWritableDatabase();
         //取得Title
         EditText editText_title = (EditText) findViewById(R.id.editText_Title);
         title = editText_title.getText().toString();
@@ -414,14 +414,14 @@ public class NewRemindActivity extends AppCompatActivity {
             //回到主頁面
             if (CalendarConfirgureDialog.moding_Database) {
                 /////更新資料庫
-                db.update(DataBaseTable, contentValues, "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
+                db.update("Note", contentValues, "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
             } else {
                 /////新增資料庫
-                db.insert(DataBaseTable, null, contentValues);
+                db.insert("Note", null, contentValues);
             }
 
             Intent intent = new Intent();
-            intent.setClass(NewRemindActivity.this, MainActivity.class);
+            intent.setClass(EditNoteActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
             Toast.makeText(this, "標題不能空白", Toast.LENGTH_SHORT).show();

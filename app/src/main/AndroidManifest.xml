@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calendar">
         <activity
-            android:name=".NewRemindActivity"
+            android:name=".EditNoteActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -1,17 +1,12 @@
 package com.example.calendar;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,10 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.gridlayout.widget.GridLayout;
 
-import com.example.calendar.ui.calendar.CalendarFragment;
-
-import java.security.PublicKey;
-
 public class CalendarConfirgureDialog extends DialogFragment {
     public static Dialog colorDl;
     public static int selected_color;
@@ -34,7 +25,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
     private static final int DataBaseVersion = 1;
     private static final String DataBaseTable = "Remind";
     private static SQLiteDatabase db;
-    private static SqlDataBaseHelper sqlDataBaseHelper;
+    private static DataBase sqlDataBaseHelper;
     public static boolean moding_Database = false;
     public static int id_modifier;
     public static String name_modifier;
@@ -55,7 +46,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
             View root = getLayoutInflater().inflate(R.layout.dialog_cal_config, null);
             ImageView iv = getActivity().findViewById(R.id.image_color);
 
-            sqlDataBaseHelper = new SqlDataBaseHelper(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
+            sqlDataBaseHelper = new DataBase(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
             db = sqlDataBaseHelper.getWritableDatabase();
             Cursor cursor = db.rawQuery(String.format(
                     "SELECT * FROM %s " +
@@ -94,7 +85,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
                     id_modifier = text_title.getId();
                     moding_Database = true;
                     Intent intent = new Intent();
-                    intent.setClass(root.getContext(), NewRemindActivity.class);
+                    intent.setClass(root.getContext(), EditNoteActivity.class);
                     startActivity(intent);
                 });
                 //addView
