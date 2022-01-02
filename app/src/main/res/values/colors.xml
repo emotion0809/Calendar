@@ -18,12 +18,12 @@
     <color name="border">#DCDCEF</color>
     <color name="border_today">#55ACDF</color>
     <color name="solid_today">#DCDCEF</color>
-    <color name="remind_blue">#FF5555FF</color>
-    <color name="remind_red">#FFFF5555</color>
-    <color name="remind_green">#FF55FF55</color>
-    <color name="remind_magenta">#FFEE33EE</color>
-    <color name="remind_cyan">#FF33EEEE</color>
-    <color name="remind_yellow">#FFEEEE33</color>
-    <color name="remind_purple">#FFAA00AA</color>
-    <color name="remind_orange">#FFFF8000</color>
+    <color name="note_blue">#FF5555FF</color>
+    <color name="note_red">#FFFF5555</color>
+    <color name="note_green">#FF55FF55</color>
+    <color name="note_magenta">#FFEE33EE</color>
+    <color name="note_cyan">#FF33EEEE</color>
+    <color name="note_yellow">#FFEEEE33</color>
+    <color name="note_purple">#FFAA33AA</color>
+    <color name="note_orange">#FFFF8000</color>
 </resources>

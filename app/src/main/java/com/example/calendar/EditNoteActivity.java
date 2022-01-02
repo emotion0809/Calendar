@@ -52,17 +52,23 @@ public class EditNoteActivity extends AppCompatActivity {
     private Spinner sp_type;
     private TextView tv_startTime;
     private TextView tv_endTime;
+    private TextView tv_color;
 
     public static LinearLayout lastColor;
 
-    public static int[] colorCircle = {R.color.remind_blue,
-            R.color.remind_red,
-            R.color.remind_green,
-            R.color.remind_yellow,
-            R.color.remind_magenta,
-            R.color.remind_cyan,
-            R.color.remind_purple,
-            R.color.remind_orange};
+    public static int[] colorCircle = {
+            R.color.note_blue,
+            R.color.note_red,
+            R.color.note_green,
+            R.color.note_yellow,
+            R.color.note_magenta,
+            R.color.note_cyan,
+            R.color.note_purple,
+            R.color.note_orange};
+
+    public static String[] colorString = {
+            "藍色","紅色","綠色","黃色","洋紅色","青色","紫色","橘色"
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -86,6 +92,7 @@ public class EditNoteActivity extends AppCompatActivity {
         sp_type = this.findViewById(R.id.sp_type);
         tv_startTime = this.findViewById(R.id.tv_startTime);
         tv_endTime = this.findViewById(R.id.tv_endTime);
+        tv_color = this.findViewById(R.id.tv_endTime);
         //放入資料
         if (isUpdateNote) {
             String sql = String.format(
@@ -113,9 +120,13 @@ public class EditNoteActivity extends AppCompatActivity {
                 setTvTime();
             }
             iv_color.setColorFilter(colorCircle[color]);
+            tv_color.setText(colorString[color]);
         } else {
             actionBar.setTitle("新增記事");
+            type = "工作";
+            color = 0;
             sw_allDay.setChecked(true);
+            isAllDay = "Y";
             for (int i = 0; i < time.length; i++) {
                 for (int j = 0; j < time[i].length; j++) {
                     if (i != 1 || j != 3) {
@@ -129,19 +140,16 @@ public class EditNoteActivity extends AppCompatActivity {
 
                 }
             }
-            bt_startTime.setText(String.format("%d年%d月%d日", time[0][0], time[0][1], time[0][2]));
-            bt_endTime.setText(String.format("%d年%d月%d日", time[1][0], time[1][1], time[1][2]));
+            setTvTime();
         }
         //switch建觸發(AllDay)
         sw_allDay.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isChecked()) {
                 isAllDay = "Y";
-                bt_startTime.setText(String.format("%d年%d月%d日", time[0][0], time[0][1], time[0][2]));
-                bt_endTime.setText(String.format("%d年%d月%d日", time[1][0], time[1][1], time[1][2]));
+                setTvTime();
             } else {
                 isAllDay = "N";
-                bt_startTime.setText(String.format("%d年%d月%d日　　%d:%d", time[0][0], time[0][1], time[0][2], time[0][3], time[0][4]));
-                bt_endTime.setText(String.format("%d年%d月%d日　　%d:%d", time[1][0], time[1][1], time[1][2], time[1][3], time[1][4]));
+                setTvTime();
             }
         });
         //sp_type功能設置
@@ -183,7 +191,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (CalendarConfirgureDialog.moding_Database) {
+        if (SelectNoteDialog.moding_Database) {
             getMenuInflater().inflate(R.menu.menu_mod_data, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -194,14 +202,14 @@ public class EditNoteActivity extends AppCompatActivity {
         //返回建觸發
         switch (item.getItemId()) {
             case android.R.id.home:
-                CalendarConfirgureDialog.moding_Database = false;
+                SelectNoteDialog.moding_Database = false;
                 finish();
                 break;
             case R.id.button_delete:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("你確定要刪除這筆資料嗎?");
                 builder.setPositiveButton("確定", (dialog, id) -> {
-                    db.delete("Note", "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
+                    db.delete("Note", "id=" + String.format("%s", SelectNoteDialog.id_modifier), null);
                     Intent intent = new Intent();
                     intent.setClass(EditNoteActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -272,35 +280,35 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         switch (v.getId()) {
             case R.id.linear_blue:
-                SelectColorDialog.selected_color = R.color.remind_blue;
+                SelectColorDialog.selected_color = R.color.note_blue;
                 color = 0;
                 break;
             case R.id.linear_red:
-                SelectColorDialog.selected_color = R.color.remind_red;
+                SelectColorDialog.selected_color = R.color.note_red;
                 color = 1;
                 break;
             case R.id.linear_green:
-                SelectColorDialog.selected_color = R.color.remind_green;
+                SelectColorDialog.selected_color = R.color.note_green;
                 color = 2;
                 break;
             case R.id.linear_yellow:
-                SelectColorDialog.selected_color = R.color.remind_yellow;
+                SelectColorDialog.selected_color = R.color.note_yellow;
                 color = 3;
                 break;
             case R.id.linear_magenta:
-                SelectColorDialog.selected_color = R.color.remind_magenta;
+                SelectColorDialog.selected_color = R.color.note_magenta;
                 color = 4;
                 break;
             case R.id.linear_cyan:
-                SelectColorDialog.selected_color = R.color.remind_cyan;
+                SelectColorDialog.selected_color = R.color.note_cyan;
                 color = 5;
                 break;
             case R.id.linear_purple:
-                SelectColorDialog.selected_color = R.color.remind_purple;
+                SelectColorDialog.selected_color = R.color.note_purple;
                 color = 6;
                 break;
             case R.id.linear_orange:
-                SelectColorDialog.selected_color = R.color.remind_orange;
+                SelectColorDialog.selected_color = R.color.note_orange;
                 color = 7;
                 break;
         }
@@ -331,7 +339,7 @@ public class EditNoteActivity extends AppCompatActivity {
             contentValues.put("endMinute", time[1][4]);
             if (isUpdateNote) {
                 /////更新資料庫
-                db.update("Note", contentValues, "id=" + String.format("%s", CalendarConfirgureDialog.id_modifier), null);
+                db.update("Note", contentValues, "id=" + String.format("%s", SelectNoteDialog.id_modifier), null);
             } else {
                 /////新增資料庫
                 db.insert("Note", null, contentValues);
@@ -350,8 +358,8 @@ public class EditNoteActivity extends AppCompatActivity {
             bt_startTime.setText(String.format("%d年%d月%d日", time[0][0], time[0][1], time[0][2]));
             bt_endTime.setText(String.format("%d年%d月%d日", time[1][0], time[1][1], time[1][2]));
         } else {
-            bt_startTime.setText(String.format("%d年%d月%d日　　%d:%d", time[0][0], time[0][1], time[0][2], timeFormatter(time[0][3]), timeFormatter(time[0][4])));
-            bt_endTime.setText(String.format("%d年%d月%d日　　%d:%d", time[1][0], time[1][1], time[1][2], timeFormatter(time[1][3]), timeFormatter(time[1][4])));
+            bt_startTime.setText(String.format("%d年%d月%d日　　%s:%s", time[0][0], time[0][1], time[0][2], timeFormatter(time[0][3]), timeFormatter(time[0][4])));
+            bt_endTime.setText(String.format("%d年%d月%d日　　%s:%s", time[1][0], time[1][1], time[1][2], timeFormatter(time[1][3]), timeFormatter(time[1][4])));
         }
     }
 

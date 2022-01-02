@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid
         android:width="2sp"
-        android:color="@color/remind_blue"
+        android:color="@color/note_cyan"
         />
     <corners
         android:bottomRightRadius="5dp"

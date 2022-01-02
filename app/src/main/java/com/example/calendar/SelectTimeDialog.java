@@ -41,18 +41,6 @@ public class SelectTimeDialog extends DialogFragment {
     public static int isStart;
     public static View root;
 
-    public static int s_year = MainActivity.dateTime[0];
-    public static int s_month = MainActivity.dateTime[1];
-    public static int s_date = MainActivity.dateTime[2];
-    public static int s_minute = MainActivity.dateTime[3];
-    public static int s_hour = MainActivity.dateTime[4];
-    public static int e_year = MainActivity.dateTime[0];
-    public static int e_month = MainActivity.dateTime[1];
-    public static int e_date = MainActivity.dateTime[2];
-    public static int e_minute;
-    public static int e_hour;
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

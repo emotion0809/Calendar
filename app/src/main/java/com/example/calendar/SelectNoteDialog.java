@@ -18,25 +18,26 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.gridlayout.widget.GridLayout;
 
-public class CalendarConfirgureDialog extends DialogFragment {
+public class SelectNoteDialog extends DialogFragment {
     public static Dialog colorDl;
     public static int selected_color;
     private static final String DataBaseName = "Calendar";
     private static final int DataBaseVersion = 1;
-    private static final String DataBaseTable = "Remind";
+    private static final String DataBaseTable = "Note";
     private static SQLiteDatabase db;
     private static DataBase sqlDataBaseHelper;
     public static boolean moding_Database = false;
     public static int id_modifier;
     public static String name_modifier;
-    public static int[] colorBackground = {R.drawable.remind_blue,
-            R.drawable.remind_red,
-            R.drawable.remind_green,
-            R.drawable.remind_yellow,
-            R.drawable.remind_magenta,
-            R.drawable.remind_cyan,
-            R.drawable.remind_purple,
-            R.drawable.remind_orange};
+    public static int[] colorBackground = {
+            R.drawable.note_blue,
+            R.drawable.note_red,
+            R.drawable.note_green,
+            R.drawable.note_yellow,
+            R.drawable.note_magenta,
+            R.drawable.note_cyan,
+            R.drawable.note_purple,
+            R.drawable.note_orange};
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -106,7 +107,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                            CalendarConfirgureDialog.this.getDialog().cancel();
+                            SelectNoteDialog.this.getDialog().cancel();
                         }
                     });
         } catch (Exception ex) {

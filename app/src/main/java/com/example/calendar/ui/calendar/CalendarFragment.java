@@ -36,14 +36,14 @@ public class CalendarFragment extends Fragment {
     private static DataBase dataBase;
     //記事背景顏色
     public static int[] colorBackground = {
-            R.drawable.remind_blue,
-            R.drawable.remind_red,
-            R.drawable.remind_green,
-            R.drawable.remind_yellow,
-            R.drawable.remind_magenta,
-            R.drawable.remind_cyan,
-            R.drawable.remind_purple,
-            R.drawable.remind_orange
+            R.drawable.note_blue,
+            R.drawable.note_red,
+            R.drawable.note_green,
+            R.drawable.note_yellow,
+            R.drawable.note_magenta,
+            R.drawable.note_cyan,
+            R.drawable.note_purple,
+            R.drawable.note_orange
     };
     public static int startDay = 6;
     public static int calendarDate[] = new int[3];
@@ -128,7 +128,7 @@ public class CalendarFragment extends Fragment {
                     tv_note[n][i]
                             = new TextView(new ContextThemeWrapper(root.getContext(), R.style.calendarNote));
                     GridLayout.LayoutParams param2 = new GridLayout.LayoutParams();
-                    param2.setMargins(5, 5, 5, 5);
+                    param2.setMargins(3, 3, 3, 3);
                     param2.height = GridLayout.LayoutParams.WRAP_CONTENT;
                     param2.width = GridLayout.LayoutParams.MATCH_PARENT;
                     tv_note[n][i].setLayoutParams(param2);
@@ -164,7 +164,7 @@ public class CalendarFragment extends Fragment {
             String title = cursor.getString(0);
             int color = cursor.getInt(1);
             int startDate = cursor.getInt(2);
-            if (n[startDate - 1] <= 3) {
+            if (n[startDate - 1] < 3) {
                 tv_note[startDate + startDay - 1][n[startDate - 1]].setText(title);
                 tv_note[startDate + startDay - 1][n[startDate - 1]]
                         .setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[color]));

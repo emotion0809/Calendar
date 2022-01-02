@@ -31,7 +31,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_blue" />
+                app:tint="@color/note_blue" />
 
             <TextView
                 android:id="@+id/text_Blue"
@@ -62,7 +62,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_red" />
+                app:tint="@color/note_red" />
 
             <TextView
                 android:id="@+id/text_red"
@@ -131,7 +131,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_yellow" />
+                app:tint="@color/note_yellow" />
 
             <TextView
                 android:id="@+id/tex_yellow"
@@ -170,7 +170,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_magenta" />
+                app:tint="@color/note_magenta" />
 
             <TextView
                 android:id="@+id/text_magenta"
@@ -201,7 +201,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_cyan" />
+                app:tint="@color/note_cyan" />
 
             <TextView
                 android:id="@+id/tex_cyan"
@@ -238,7 +238,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_purple" />
+                app:tint="@color/note_purple" />
 
             <TextView
                 android:id="@+id/text_purple"
@@ -269,7 +269,7 @@
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/remind_orange" />
+                app:tint="@color/note_orange" />
 
             <TextView
                 android:id="@+id/tex_orange"

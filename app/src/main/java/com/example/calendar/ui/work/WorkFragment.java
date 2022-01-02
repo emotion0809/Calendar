@@ -62,7 +62,7 @@ public class WorkFragment extends Fragment {
                 //第一層Layout設置
                 LinearLayout layout1 = new LinearLayout(root.getContext());
                 layout1.setOrientation(LinearLayout.HORIZONTAL);
-                layout1.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.remind_blue));
+                layout1.setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.note_blue));
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = GridLayout.LayoutParams.WRAP_CONTENT;
                 param.width = GridLayout.LayoutParams.MATCH_PARENT;
