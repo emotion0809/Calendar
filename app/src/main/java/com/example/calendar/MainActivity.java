@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
-        //浮動按鈕
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //Drawer
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -60,15 +58,12 @@ public class MainActivity extends AppCompatActivity {
         Stetho.initializeWithDefaults(this);
     }
 
-    //選單
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-    //Drawer
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -103,16 +98,15 @@ public class MainActivity extends AppCompatActivity {
                     CalendarFragment.monthDays[1] = isLeapYear(CalendarFragment.calendarDate[0]);
                     CalendarFragment.calendarDate[1] = 12;
                 }
-                CalendarFragment.startday -= CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
-                if (CalendarFragment.startday < 1) {
-
-                    CalendarFragment.startday += 7;
+                CalendarFragment.startDay -= CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
+                if (CalendarFragment.startDay < 0) {
+                    CalendarFragment.startDay += 7;
                 }
                 break;
             case R.id.bt_rightArrow:
-                CalendarFragment.startday += CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
-                if (CalendarFragment.startday > 7) {
-                    CalendarFragment.startday -= 7;
+                CalendarFragment.startDay += CalendarFragment.monthDays[CalendarFragment.calendarDate[1] - 1] % 7;
+                if (CalendarFragment.startDay > 6) {
+                    CalendarFragment.startDay -= 7;
                 }
                 if (CalendarFragment.calendarDate[1] != 12) {
                     CalendarFragment.calendarDate[1]++;
@@ -123,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-        CalendarFragment.init(CalendarFragment.rootCalendar);
+        CalendarFragment.init();
     }
 
     public static int isLeapYear(int year) {

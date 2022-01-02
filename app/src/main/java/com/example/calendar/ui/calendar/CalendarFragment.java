@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -46,20 +45,18 @@ public class CalendarFragment extends Fragment {
             R.drawable.remind_purple,
             R.drawable.remind_orange
     };
-    public static int startday = 6;
+    public static int startDay = 6;
     public static int calendarDate[] = new int[3];
     public static int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    public static View rootCalendar;
 
-    MainActivity ma = new MainActivity();
+    public static View root;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //建構Fragment
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        rootCalendar = root;
+        root = binding.getRoot();
         //開啟資料庫
         dataBase = new DataBase(root.getContext(), "Calendar", null, 1, "Note");
         db = dataBase.getWritableDatabase();
@@ -68,7 +65,7 @@ public class CalendarFragment extends Fragment {
         calendarDate[0] = MainActivity.dateTime[0];
         calendarDate[1] = MainActivity.dateTime[1];
         calendarDate[2] = MainActivity.dateTime[2];
-        init(root);
+        init();
         return root;
     }
 
@@ -82,7 +79,7 @@ public class CalendarFragment extends Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void init(View root) {
+    public static void init() {
         final int column = 7;
         final int row = 7;
         final String[] weekdate = {"日", "一", "二", "三", "四", "五", "六"};
@@ -90,7 +87,6 @@ public class CalendarFragment extends Fragment {
         TextView text_month = root.findViewById(R.id.tv_month);
         text_month.setTextSize(20);
         text_month.setText(String.format("%d年 %d月", calendarDate[0], calendarDate[1]));
-
         GridLayout gl_calendar = (GridLayout) root.findViewById(R.id.gl_calendar);
         gl_calendar.removeAllViews();
         gl_calendar.setColumnCount(column);
@@ -121,7 +117,7 @@ public class CalendarFragment extends Fragment {
                 param.rowSpec = GridLayout.spec(r, 1f);
                 ll_date[n].setOrientation(LinearLayout.VERTICAL);
                 ll_date[(r - 1) * column + c].setLayoutParams(param);
-                ll_date[n].setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.border));
+                ll_date[n].setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.bg_calendar));
                 gl_calendar.addView(ll_date[n]);
                 //將tv_date加入ll_date
                 tv_date[n]
@@ -144,10 +140,10 @@ public class CalendarFragment extends Fragment {
         }
         //放入日期
         for (int d = 0; d < monthDays[calendarDate[1] - 1]; d++) {
-            tv_date[d + startday].setText(String.format("%d", d + 1));
+            tv_date[d + startDay].setText(String.format("%d", d + 1));
             //標記當天
             if (MainActivity.dateTime[0] == calendarDate[0] && MainActivity.dateTime[1] == calendarDate[1] && MainActivity.dateTime[2] == d + 1) {
-                ll_date[d + startday]
+                ll_date[d + startDay]
                         .setBackground(ContextCompat.getDrawable(root.getContext(), R.drawable.bg_today));
             }
         }
@@ -169,8 +165,8 @@ public class CalendarFragment extends Fragment {
             int color = cursor.getInt(1);
             int startDate = cursor.getInt(2);
             if (n[startDate - 1] <= 3) {
-                tv_note[startDate + startday - 1][n[startDate - 1]].setText(title);
-                tv_note[startDate + startday - 1][n[startDate - 1]]
+                tv_note[startDate + startDay - 1][n[startDate - 1]].setText(title);
+                tv_note[startDate + startDay - 1][n[startDate - 1]]
                         .setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[color]));
                 n[startDate - 1]++;
             }

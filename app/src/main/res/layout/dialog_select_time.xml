@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,18 +14,18 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/dialog_la"
+            android:id="@+id/bt_leftArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:minWidth="32dp"
             android:minHeight="32dp"
-            android:onClick="onClick_dialogAro"
+            android:onClick="onClick_monthChange"
             app:srcCompat="@drawable/ic_back_arrow"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/text_smallTitle"
+            android:id="@+id/tv_month"
             style="@style/calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,20 +33,20 @@
             android:text="12月" />
 
         <ImageButton
-            android:id="@+id/dialog_ra"
+            android:id="@+id/bt_rightArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:minWidth="32dp"
             android:minHeight="32dp"
-            android:onClick="onClick_dialogAro"
+            android:onClick="onClick_monthChange"
             app:srcCompat="@drawable/ic_forward_arrow"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/grid_smallCalendar"
+        android:id="@+id/gl_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:columnCount="7"
@@ -63,7 +62,7 @@
 
 
         <EditText
-            android:id="@+id/editText_hour"
+            android:id="@+id/et_hour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -73,7 +72,7 @@
             android:text="0" />
 
         <TextView
-            android:id="@+id/text_hour"
+            android:id="@+id/tv_hour"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -81,7 +80,7 @@
             style="@style/option"/>
 
         <EditText
-            android:id="@+id/editText_minute"
+            android:id="@+id/et_minute"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -91,7 +90,7 @@
             android:text="0" />
 
         <TextView
-            android:id="@+id/text_minute"
+            android:id="@+id/tv_minute"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

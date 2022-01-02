@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -118,7 +118,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -188,7 +188,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -225,7 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 
@@ -256,7 +256,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/border_color"
+            android:background="@drawable/bg_color"
             android:onClick="onClick_dialogColor"
             android:orientation="horizontal">
 

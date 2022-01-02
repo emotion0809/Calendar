@@ -44,7 +44,7 @@ public class CalendarConfirgureDialog extends DialogFragment {
         try {
             //colorDl = this.getDialog();
             View root = getLayoutInflater().inflate(R.layout.dialog_cal_config, null);
-            ImageView iv = getActivity().findViewById(R.id.image_color);
+            ImageView iv = getActivity().findViewById(R.id.iv_color);
 
             sqlDataBaseHelper = new DataBase(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
             db = sqlDataBaseHelper.getWritableDatabase();
