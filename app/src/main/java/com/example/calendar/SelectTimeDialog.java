@@ -95,11 +95,6 @@ public class SelectTimeDialog extends DialogFragment {
         } else {
             LinearLayout layout_time = (LinearLayout) root.findViewById(R.id.layout_time);
             layout_time.setVisibility(View.VISIBLE);
-            try {
-
-            }catch (Exception ex){
-                System.out.println(ex.toString());
-            }
         }
         builder.setView(root)
                 .setPositiveButton(R.string.define, new DialogInterface.OnClickListener() {
@@ -202,4 +197,6 @@ public class SelectTimeDialog extends DialogFragment {
         else
             return false;
     }
+
+
 }

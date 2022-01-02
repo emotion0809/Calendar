@@ -14,12 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.example.calendar.MainActivity;
 import com.example.calendar.R;
 import com.example.calendar.DataBase;
+import com.example.calendar.SelectColorDialog;
+import com.example.calendar.SelectNoteDialog;
 import com.example.calendar.databinding.FragmentCalendarBinding;
 
 public class CalendarFragment extends Fragment {
@@ -66,17 +69,15 @@ public class CalendarFragment extends Fragment {
         calendarDate[1] = MainActivity.dateTime[1];
         calendarDate[2] = MainActivity.dateTime[2];
         init();
+        setListener();
         return root;
     }
 
     @Override
     public void onDestroyView() {
-
         super.onDestroyView();
         binding = null;
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void init() {
@@ -141,6 +142,7 @@ public class CalendarFragment extends Fragment {
         //放入日期
         for (int d = 0; d < monthDays[calendarDate[1] - 1]; d++) {
             tv_date[d + startDay].setText(String.format("%d", d + 1));
+            ll_date[d + startDay].setId(d + 1);
             //標記當天
             if (MainActivity.dateTime[0] == calendarDate[0] && MainActivity.dateTime[1] == calendarDate[1] && MainActivity.dateTime[2] == d + 1) {
                 ll_date[d + startDay]
@@ -171,6 +173,16 @@ public class CalendarFragment extends Fragment {
                 n[startDate - 1]++;
             }
             cursor.moveToNext();
+        }
+    }
+
+    public void setListener() {
+        for (int d = 0; d < monthDays[calendarDate[1] - 1]; d++) {
+            ll_date[d + startDay].setOnClickListener(v -> {
+                SelectNoteDialog.date = v.getId();
+                DialogFragment newFragment = new SelectNoteDialog();
+                newFragment.show(getParentFragmentManager(), "");
+            });
         }
     }
 }

@@ -31,6 +31,9 @@
     <string name="minute">分</string>
     <string name="expired">過期</string>
     <string name="append">新增</string>
+    <string name="login">登入</string>
+    <string name="username">帳號</string>
+    <string name="password">密碼</string>
     <string-array name="spinner">
         <item>工作</item>
         <item>活動</item>

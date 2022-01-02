@@ -28,6 +28,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.calendar.ui.calendar.CalendarFragment;
 import com.facebook.stetho.Stetho;
 
 public class EditNoteActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class EditNoteActivity extends AppCompatActivity {
     //判斷為新增或更新
     public static Boolean isUpdateNote = false;
     public static int updateNoteId;
+    public static Boolean isEnterbyDialog;
     //編輯物件
     private EditText et_title;
     private ImageView iv_color;
@@ -67,7 +69,7 @@ public class EditNoteActivity extends AppCompatActivity {
             R.color.note_orange};
 
     public static String[] colorString = {
-            "藍色","紅色","綠色","黃色","洋紅色","青色","紫色","橘色"
+            "藍色", "紅色", "綠色", "黃色", "洋紅色", "青色", "紫色", "橘色"
     };
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -92,7 +94,7 @@ public class EditNoteActivity extends AppCompatActivity {
         sp_type = this.findViewById(R.id.sp_type);
         tv_startTime = this.findViewById(R.id.tv_startTime);
         tv_endTime = this.findViewById(R.id.tv_endTime);
-        tv_color = this.findViewById(R.id.tv_endTime);
+        tv_color = this.findViewById(R.id.tv_color);
         //放入資料
         if (isUpdateNote) {
             String sql = String.format(
@@ -111,7 +113,6 @@ public class EditNoteActivity extends AppCompatActivity {
                     time[i][j] = cursor.getInt(i * time[i].length + j + 5);
                 }
             }
-            et_title.setText(title);
             if (type.matches("Y")) {
                 sw_allDay.setChecked(true);
                 setTvTime();
@@ -119,7 +120,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 sw_allDay.setChecked(false);
                 setTvTime();
             }
-            iv_color.setColorFilter(colorCircle[color]);
+            iv_color.setColorFilter(this.getColor(colorCircle[color]));
             tv_color.setText(colorString[color]);
         } else {
             actionBar.setTitle("新增記事");
@@ -127,17 +128,29 @@ public class EditNoteActivity extends AppCompatActivity {
             color = 0;
             sw_allDay.setChecked(true);
             isAllDay = "Y";
-            for (int i = 0; i < time.length; i++) {
-                for (int j = 0; j < time[i].length; j++) {
-                    if (i != 1 || j != 3) {
-                        time[i][j] = MainActivity.dateTime[j];
-                    } else {
-                        time[i][j] = MainActivity.dateTime[j] + 1;
-                        if (time[i][j] >= 24) {
-                            time[i][j] = 0;
+            if (isEnterbyDialog) {
+                time[0][0] = CalendarFragment.calendarDate[0];
+                time[0][1] = CalendarFragment.calendarDate[1];
+                time[0][2] = SelectNoteDialog.date;
+                time[0][3] = 8;
+                time[0][4] = 0;
+                time[1][0] = CalendarFragment.calendarDate[0];
+                time[1][1] = CalendarFragment.calendarDate[1];
+                time[1][2] = SelectNoteDialog.date;
+                time[1][3] = 9;
+                time[1][4] = 0;
+            } else {
+                for (int i = 0; i < time.length; i++) {
+                    for (int j = 0; j < time[i].length; j++) {
+                        if (i != 1 || j != 3) {
+                            time[i][j] = MainActivity.dateTime[j];
+                        } else {
+                            time[i][j] = MainActivity.dateTime[j] + 1;
+                            if (time[i][j] >= 24) {
+                                time[i][j] = 0;
+                            }
                         }
                     }
-
                 }
             }
             setTvTime();
@@ -156,6 +169,12 @@ public class EditNoteActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         sp_type.setAdapter(adapter);
+        et_title.setText(title);
+        if (type.matches("活動")) {
+            sp_type.setSelection(1, false);
+        } else if (type.matches("體醒")) {
+            sp_type.setSelection(2, false);
+        }
         sp_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -191,7 +210,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (SelectNoteDialog.moding_Database) {
+        if (isUpdateNote) {
             getMenuInflater().inflate(R.menu.menu_mod_data, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -202,14 +221,14 @@ public class EditNoteActivity extends AppCompatActivity {
         //返回建觸發
         switch (item.getItemId()) {
             case android.R.id.home:
-                SelectNoteDialog.moding_Database = false;
+                isUpdateNote = false;
                 finish();
                 break;
             case R.id.button_delete:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("你確定要刪除這筆資料嗎?");
                 builder.setPositiveButton("確定", (dialog, id) -> {
-                    db.delete("Note", "id=" + String.format("%s", SelectNoteDialog.id_modifier), null);
+                    db.delete("Note", "id=" + String.format("%s", updateNoteId), null);
                     Intent intent = new Intent();
                     intent.setClass(EditNoteActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -224,7 +243,7 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     public void onClick_selectTime(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.bt_startTime:
                 SelectTimeDialog.isStart = 0;
                 break;
@@ -339,7 +358,7 @@ public class EditNoteActivity extends AppCompatActivity {
             contentValues.put("endMinute", time[1][4]);
             if (isUpdateNote) {
                 /////更新資料庫
-                db.update("Note", contentValues, "id=" + String.format("%s", SelectNoteDialog.id_modifier), null);
+                db.update("Note", contentValues, "id=" + String.format("%s", updateNoteId), null);
             } else {
                 /////新增資料庫
                 db.insert("Note", null, contentValues);
@@ -364,7 +383,7 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     public static String timeFormatter(int n) {
-        String formated = String.format("%d",n);
+        String formated = String.format("%d", n);
         if (n < 10) {
             formated = "0" + formated;
         }

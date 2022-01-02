@@ -18,17 +18,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.gridlayout.widget.GridLayout;
 
+import com.example.calendar.ui.calendar.CalendarFragment;
+
 public class SelectNoteDialog extends DialogFragment {
-    public static Dialog colorDl;
-    public static int selected_color;
-    private static final String DataBaseName = "Calendar";
-    private static final int DataBaseVersion = 1;
-    private static final String DataBaseTable = "Note";
+    //資料庫
     private static SQLiteDatabase db;
     private static DataBase sqlDataBaseHelper;
-    public static boolean moding_Database = false;
-    public static int id_modifier;
-    public static String name_modifier;
     public static int[] colorBackground = {
             R.drawable.note_blue,
             R.drawable.note_red,
@@ -38,82 +33,96 @@ public class SelectNoteDialog extends DialogFragment {
             R.drawable.note_cyan,
             R.drawable.note_purple,
             R.drawable.note_orange};
+    //資料庫資料
+    private int id;
+    private String title;
+    private int color;
+    private String isAllDay;
+    private int startHour;
+    private int startMinute;
+
+    public static int date;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        try {
-            //colorDl = this.getDialog();
-            View root = getLayoutInflater().inflate(R.layout.dialog_cal_config, null);
-            ImageView iv = getActivity().findViewById(R.id.iv_color);
+        //colorDl = this.getDialog();
+        View root = getLayoutInflater().inflate(R.layout.dialog_cal_config, null);
+        ImageView iv = getActivity().findViewById(R.id.iv_color);
 
-            sqlDataBaseHelper = new DataBase(root.getContext(), DataBaseName, null, DataBaseVersion, DataBaseTable);
-            db = sqlDataBaseHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery(String.format(
-                    "SELECT * FROM %s " +
-                            "ORDER BY startYear,startMonth,startDate,startHour,startMinute ",
-                    DataBaseTable), null);
-            cursor.moveToFirst();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                LinearLayout layout_list = (LinearLayout) root.findViewById(R.id.linear_config);
-                //第一層Layout
-                LinearLayout layout1 = new LinearLayout(root.getContext());
-                layout1.setOrientation(LinearLayout.HORIZONTAL);
-                layout1.setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[cursor.getInt(3)]));
-                GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-                param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-                param.width = GridLayout.LayoutParams.MATCH_PARENT;
-                param.setMargins(150, 20, 150, 20);
-                layout1.setLayoutParams(param);
-                //title
-                TextView text_title = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTitle));
-                text_title.setText(cursor.getString(1));
-                text_title.setWidth(550);
-                text_title.setId(cursor.getInt(0));
-                //Time
-                TextView text_time = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTime));
-
-
-                text_title.setText(cursor.getString(1));
-                text_title.setWidth(550);
-
-                if (cursor.getString(4).matches("Y")) {
-                    text_time.setText("全天");
-                } else {
-                    text_time.setText(String.format("%2d:%2d", cursor.getInt(8), cursor.getInt(9)));
-                }
-                text_title.setOnClickListener(v -> {
-                    id_modifier = text_title.getId();
-                    moding_Database = true;
-                    Intent intent = new Intent();
-                    intent.setClass(root.getContext(), EditNoteActivity.class);
-                    startActivity(intent);
-                });
-                //addView
-                layout1.addView(text_title);
-                layout1.addView(text_time);
-                layout_list.addView(layout1);
-                cursor.moveToNext();
+        sqlDataBaseHelper = new DataBase(root.getContext(), "Calendar", null, 1, "Note");
+        db = sqlDataBaseHelper.getWritableDatabase();
+        String sql = String.format(
+                "SELECT id,title,color,isAllDay,startHour,startMinute FROM Note " +
+                        "where startYear = %d And startMonth = %d And startDate = %d " +
+                        "ORDER BY isAllDay,startHour,startMinute "
+                , CalendarFragment.calendarDate[0], CalendarFragment.calendarDate[1], date
+        );
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            id = cursor.getInt(0);
+            title = cursor.getString(1);
+            color = cursor.getInt(2);
+            isAllDay = cursor.getString(3);
+            startHour = cursor.getInt(4);
+            startMinute = cursor.getInt(5);
+            LinearLayout layout_list = (LinearLayout) root.findViewById(R.id.linear_config);
+            //第一層Layout
+            LinearLayout layout1 = new LinearLayout(root.getContext());
+            layout1.setOrientation(LinearLayout.HORIZONTAL);
+            layout1.setBackground(ContextCompat.getDrawable(root.getContext(), colorBackground[color]));
+            GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.width = GridLayout.LayoutParams.MATCH_PARENT;
+            param.setMargins(150, 20, 150, 20);
+            layout1.setLayoutParams(param);
+            layout1.setId(id);
+            layout1.setOnClickListener(v -> {
+                EditNoteActivity.updateNoteId = layout1.getId();
+                EditNoteActivity.isUpdateNote = true;
+                Intent intent = new Intent();
+                intent.setClass(root.getContext(), EditNoteActivity.class);
+                startActivity(intent);
+            });
+            //title
+            TextView text_title = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTitle));
+            text_title.setText(title);
+            text_title.setWidth(550);
+            //Time
+            TextView text_time = new TextView(new ContextThemeWrapper(root.getContext(), R.style.CalendarConfigureTime));
+            text_title.setWidth(550);
+            if (isAllDay.matches("Y")) {
+                text_time.setText("全天");
+            } else {
+                text_time.setText(String.format("%s:%s", EditNoteActivity.timeFormatter(startHour), EditNoteActivity.timeFormatter(startMinute)));
             }
-            builder.setView(root)
-                    // Add action buttons
-                    .setPositiveButton(R.string.append, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // sign in the user ...
-
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            SelectNoteDialog.this.getDialog().cancel();
-                        }
-                    });
-        } catch (Exception ex) {
-            Toast.makeText(getContext(), String.format("%s", ex), Toast.LENGTH_SHORT).show();
+            //addView
+            layout1.addView(text_title);
+            layout1.addView(text_time);
+            layout_list.addView(layout1);
+            cursor.moveToNext();
         }
 
+        builder.setView(root)
+                // Add action buttons
+                .setPositiveButton(R.string.append, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditNoteActivity.isUpdateNote = false;
+                        EditNoteActivity.isEnterbyDialog = true;
+                        Intent intent = new Intent();
+                        intent.setClass(root.getContext(), EditNoteActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        SelectNoteDialog.this.getDialog().cancel();
+                    }
+                });
         return builder.create();
+
     }
 }

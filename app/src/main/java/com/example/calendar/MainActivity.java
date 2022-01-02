@@ -3,6 +3,7 @@ package com.example.calendar;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
@@ -13,7 +14,10 @@ import com.facebook.stetho.Stetho;
 import com.google.android.material.navigation.NavigationView;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditNoteActivity.isUpdateNote = false;
+                EditNoteActivity.isEnterbyDialog = false;
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, EditNoteActivity.class);
                 startActivity(intent);
@@ -62,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_login:
+                DialogFragment newFragment = new LoginDialog();
+                newFragment.show(getSupportFragmentManager(), "");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -127,5 +144,6 @@ public class MainActivity extends AppCompatActivity {
             return 28;
         }
     }
+
 
 }
