@@ -2,6 +2,7 @@ package com.example.calendar;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     public static int dateTime[] = new int[5];
+    CustomReceiver mReceiver = new CustomReceiver();
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -63,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         Stetho.initializeWithDefaults(this);
-        //Broadcast
-        BroadcastReceiver br = new MyBroadcastReceiver();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
+        // Register the receiver using the activity context.
+        this.registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -149,4 +156,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onDestroy() {
+        //Unregister the receiver
+        this.unregisterReceiver(mReceiver);
+        super.onDestroy();
+    }
 }
