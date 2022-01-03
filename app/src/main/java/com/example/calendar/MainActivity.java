@@ -1,5 +1,6 @@
 package com.example.calendar;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         Stetho.initializeWithDefaults(this);
+        //Broadcast
+        BroadcastReceiver br = new MyBroadcastReceiver();
     }
 
     @Override
