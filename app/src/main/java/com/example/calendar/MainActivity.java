@@ -1,8 +1,12 @@
 package com.example.calendar;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,6 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -29,7 +34,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +45,49 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public static int dateTime[] = new int[5];
     CustomReceiver mReceiver = new CustomReceiver();
+    //TestNoti
 
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private NotificationManager mNotifyManager;
+    private static final int NOTIFICATION_ID = 0;
+
+    public void createNotificationChannel() {
+        mNotifyManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.O) {
+            // Create a NotificationChannel
+            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
+                    "Mascot Notification", NotificationManager
+                    .IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Notification from Mascot");
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private NotificationCompat.Builder getNotificationBuilder() {
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,
+                NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+                .setContentTitle("You've been notified!")
+                .setContentText("This is your notification text.")
+                .setSmallIcon(R.drawable.ic_add)
+                .setContentIntent(notificationPendingIntent)
+                .setAutoCancel(true);
+        return notifyBuilder;
+    }
+
+    public void sendNotification() {
+        NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
+        Toast.makeText(this, "Builder:" + String.format("%s", mNotifyManager), Toast.LENGTH_SHORT).show();
+        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -46,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
+
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +123,34 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(Intent.ACTION_POWER_CONNECTED);
         // Register the receiver using the activity context.
         this.registerReceiver(mReceiver, filter);
+        createNotificationChannel();
+
+        try {
+            sendNotification();
+            //每兩秒抓時間
+            Timer timer = new Timer();
+            System.out.println("Delay：3秒, Period：2秒");
+            System.out.println("In testScheduleDelayAndPeriod："
+                    + new Date());
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Date d = new Date();
+                    System.out.println(d);
+                }
+            }, 3000, 2000);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+            }
+            //timer.cancel();
+            System.out.println("End testScheduleDelayAndPeriod："
+                    + new Date() + "\n");
+        } catch (Exception ex) {
+            Toast.makeText(this, String.format("%s", ex), Toast.LENGTH_LONG).show();
+            System.out.println(String.format("%s", ex));
+        }
     }
 
     @Override
